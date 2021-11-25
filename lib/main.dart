@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:susmatior_app/ui/screens/home/splash_screen.dart';
+import 'package:susmatior_app/ui/screens/splash/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
