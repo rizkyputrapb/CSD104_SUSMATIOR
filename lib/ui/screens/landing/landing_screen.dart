@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
+import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 
 class LandingScreen extends StatelessWidget {
   static const routeName = '/landing_screen';
@@ -85,7 +86,8 @@ class LandingScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width / 3,
                     height: 56.0,
                     child: MaterialButton(
-                      onPressed: () {},
+                      onPressed: () =>
+                          Navigator.pushNamed(context, HomeScreen.routeName),
                       elevation: 0,
                       hoverElevation: 0,
                       focusElevation: 0,
