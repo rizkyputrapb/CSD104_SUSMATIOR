@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
+import 'package:susmatior_app/constants/radius_constants.dart';
 
 class LandingScreen extends StatelessWidget {
   static const routeName = '/landing_screen';
@@ -48,8 +49,8 @@ class LandingScreen extends StatelessWidget {
             Ink(
               width: MediaQuery.of(context).size.width / 1.5,
               decoration: BoxDecoration(
-                color: Color(0xFFE8EDFC),
-                borderRadius: BorderRadius.circular(12.0),
+                color: const Color(0xFFE8EDFC),
+                borderRadius: BorderRadius.circular(radius_12),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -59,16 +60,16 @@ class LandingScreen extends StatelessWidget {
                     height: 56.0,
                     child: MaterialButton(
                       onPressed: () {},
-                      color: Color(0xFF7FACFA),
+                      color: blueSecondary,
                       elevation: 0,
                       hoverElevation: 0,
                       focusElevation: 0,
                       highlightElevation: 0,
                       splashColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(12.0),
-                          right: Radius.circular(12.0),
+                          left: Radius.circular(radius_12),
+                          right: Radius.circular(radius_12),
                         ),
                       ),
                       child: Text(
@@ -93,16 +94,16 @@ class LandingScreen extends StatelessWidget {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.horizontal(
-                          right: Radius.circular(12.0),
+                          right: Radius.circular(radius_12),
                         ),
                       ),
                       child: Text(
                         'Login',
                         style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF80B2FF),
+                          color: blueTertiary,
                           fontSize: 18.0,
                         ),
                       ),

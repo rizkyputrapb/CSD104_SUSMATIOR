@@ -1,0 +1,1 @@
+const double radius_12 = 12;
