@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
+import 'package:susmatior_app/ui/screens/login/login_screens.dart';
 
 class LandingScreen extends StatelessWidget {
   static const routeName = '/landing_screen';
+
   const LandingScreen({Key? key}) : super(key: key);
 
   @override
@@ -86,7 +88,9 @@ class LandingScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width / 3,
                     height: 56.0,
                     child: MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, LoginScreen.routeName);
+                      },
                       elevation: 0,
                       hoverElevation: 0,
                       focusElevation: 0,
