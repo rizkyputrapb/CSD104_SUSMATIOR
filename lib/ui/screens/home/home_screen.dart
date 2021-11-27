@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home_screen';
@@ -12,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             Card(
-              margin: EdgeInsets.all(0),
+              margin: const EdgeInsets.all(0),
               elevation: 0,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
@@ -31,9 +32,9 @@ class HomeScreen extends StatelessWidget {
                     fillColor: Color(0xFF428DFF),
                     filled: true,
                     hintText: 'Search...',
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(color: Colors.white),
                     hintMaxLines: 1,
-                    suffixIcon: Icon(
+                    suffixIcon: const Icon(
                       Icons.search,
                       size: 24,
                       color: Colors.white,
@@ -48,9 +49,11 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Expanded(
+              // Change this listview to listview.builder if using firebase
               child: ListView(
-                shrinkWrap: true,
-                children: const [],
+                children: const [
+                  CardListScam(),
+                ],
               ),
             ),
           ],
@@ -59,7 +62,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFFE8EDFC),
         onPressed: () {},
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Color(0xFF7FACFA),
         ),
@@ -69,7 +72,7 @@ class HomeScreen extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         notchMargin: 7,
         child: BottomNavigationBar(
-          backgroundColor: Color(0xFF428DFF),
+          backgroundColor: const Color(0xFF428DFF),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),
@@ -80,7 +83,7 @@ class HomeScreen extends StatelessWidget {
               label: 'Settings',
             ),
           ],
-          selectedItemColor: Color(0xFFBBE1FA),
+          selectedItemColor: const Color(0xFFBBE1FA),
           unselectedItemColor: Colors.white,
         ),
       ),
