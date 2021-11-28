@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
+import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -70,14 +71,16 @@ class LoginScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Container(
-                                      margin: const EdgeInsets.only(top: padding_16),
+                                      margin: const EdgeInsets.only(
+                                          top: padding_16),
                                       child: TextFormFieldWhite(
                                         label: "Email",
                                         isObscure: false,
                                       ),
                                     ),
                                     Container(
-                                      margin: const EdgeInsets.only(top: padding_16),
+                                      margin: const EdgeInsets.only(
+                                          top: padding_16),
                                       child: TextFormFieldWhite(
                                         label: "Password",
                                         isObscure: true,
@@ -88,12 +91,15 @@ class LoginScreen extends StatelessWidget {
                                 TextButton(
                                     style: ButtonStyle(
                                         backgroundColor:
-                                        MaterialStateProperty.all(buttonBlue),
+                                            MaterialStateProperty.all(
+                                                buttonBlue),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(radius_12)))),
-                                    onPressed: () {},
+                                                    BorderRadius.circular(
+                                                        radius_12)))),
+                                    onPressed: () => Navigator.pushNamed(
+                                        context, HomeScreen.routeName),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: padding_8, horizontal: 32),
@@ -122,5 +128,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
-
