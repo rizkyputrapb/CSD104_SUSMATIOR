@@ -6,7 +6,7 @@ Susmatior is an application to report possible scam/spam/fraudulent phone number
 
 
 
-### assets 🎨
+### Assets 🎨
 
 -   Illustration: [Undraw.co](https://undraw.co/illustrations)
     
