@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
+import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home_screen';
@@ -52,7 +53,9 @@ class HomeScreen extends StatelessWidget {
               // Change this listview to listview.builder if using firebase
               child: ListView(
                 children: const [
-                  CardListScam(),
+                  InkWell(
+                    child: CardListScam(),
+                  ),
                 ],
               ),
             ),
@@ -61,7 +64,9 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFFE8EDFC),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, QuestionnaireScreen.routeName);
+        },
         child: const Icon(
           Icons.add,
           color: Color(0xFF7FACFA),
