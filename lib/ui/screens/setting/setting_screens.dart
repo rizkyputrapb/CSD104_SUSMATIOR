@@ -39,7 +39,7 @@ class SettingScreen extends StatelessWidget {
                   flex: 1,
                   child: Switch.adaptive(
                     value: false,
-                    activeColor: Colors.amber[900],
+                    activeColor: Color(0xFF428DFF),
                     onChanged: (newValue) {},
                   ),
                 ),

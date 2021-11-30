@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
-import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
 import 'package:susmatior_app/ui/screens/setting/setting_screens.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class MainScreen extends StatefulWidget {
   static const routeName = '/main_screen';
@@ -21,36 +21,34 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _listWidget = <Widget>[
     const HomeScreen(),
+    const Placeholder(),
     const SettingScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _listWidget[_bottomNavbarIndex],
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFFE8EDFC),
-        onPressed: () {
-          Navigator.pushNamed(context, MainScreen.routeName);
-        },
-        child: const Icon(
-          Icons.home,
-          color: Color(0xFF7FACFA),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        clipBehavior: Clip.antiAlias,
-        notchMargin: 7,
-        child: BottomNavigationBar(
-          backgroundColor: const Color(0xFF428DFF),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Profile',
+        color: Color(0xFF428DFF),
+        child: SalomonBottomBar(
+          items: [
+            SalomonBottomBarItem(
+              icon: Icon(
+                Icons.home,
+              ),
+              title: Text('Home'),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
+            SalomonBottomBarItem(
+              icon: Icon(
+                Icons.account_circle,
+              ),
+              title: Text('Profile'),
+            ),
+            SalomonBottomBarItem(
+              icon: Icon(
+                Icons.settings,
+              ),
+              title: Text('Settings'),
             ),
           ],
           selectedItemColor: const Color(0xFFBBE1FA),
@@ -59,7 +57,6 @@ class _MainScreenState extends State<MainScreen> {
           onTap: _onItemTap,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

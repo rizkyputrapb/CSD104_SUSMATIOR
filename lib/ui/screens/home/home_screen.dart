@@ -25,8 +25,7 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.23,
+                    Flexible(
                       child: TextFormField(
                         cursorColor: Colors.white,
                         maxLines: 1,
@@ -57,21 +56,21 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 47,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF428DFF),
-                        borderRadius: BorderRadius.circular(radius_30),
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            QuestionnaireScreen.routeName,
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.white,
+                    ClipOval(
+                      child: Card(
+                        margin: EdgeInsets.all(0),
+                        color: Color(0xFFE8EDFC),
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              QuestionnaireScreen.routeName,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.add,
+                            color: Color(0xFF428DFF),
+                          ),
                         ),
                       ),
                     )
