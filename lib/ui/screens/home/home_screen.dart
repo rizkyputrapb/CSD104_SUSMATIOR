@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
 
@@ -52,10 +53,12 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               // Change this listview to listview.builder if using firebase
               child: ListView(
-                children: const [
+                children: [
                   InkWell(
+                    onTap: () => Navigator.pushNamed(
+                        context, DetailListScreen.routeName),
                     child: CardListScam(),
-                  ),
+                  )
                 ],
               ),
             ),

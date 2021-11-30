@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (context) => const HomeScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         QuestionnaireScreen.routeName: (context) => const QuestionnaireScreen(),
+        DetailListScreen.routeName: (context) => const DetailListScreen(),
       },
     );
   }
