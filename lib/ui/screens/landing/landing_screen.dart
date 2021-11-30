@@ -4,7 +4,6 @@ import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
 
-
 class LandingScreen extends StatelessWidget {
   static const routeName = '/landing_screen';
 
@@ -89,9 +88,9 @@ class LandingScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width / 3,
                     height: 56.0,
                     child: MaterialButton(
-
                       onPressed: () {
-                        Navigator.pushNamed(context, LoginScreen.routeName);
+                        Navigator.pushReplacementNamed(
+                            context, LoginScreen.routeName);
                       },
                       elevation: 0,
                       hoverElevation: 0,
