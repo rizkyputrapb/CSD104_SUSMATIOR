@@ -62,6 +62,7 @@ flutter:
   assets:
     - assets/images/img_splash_picture.png
     - assets/images/img_login_picture.png
+    - assets/images/img_sample.jpg
     - assets/icons/ic_user_scam.png
 
 
