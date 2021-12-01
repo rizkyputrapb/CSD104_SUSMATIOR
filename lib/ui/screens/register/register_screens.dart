@@ -1,10 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
-import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
 
@@ -18,7 +18,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   bool isValidated = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -45,10 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       margin: const EdgeInsets.all(padding_16),
                       child: Image.asset(
                         'assets/images/img_register_picture.png',
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height / 3.9,
+                        height: MediaQuery.of(context).size.height / 3.9,
                       ),
                     ),
                     Expanded(
@@ -78,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Container(
@@ -111,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       child: _emailFormField(emailController)),
                                   Container(
                                     margin:
-                                    const EdgeInsets.only(top: padding_16),
+                                        const EdgeInsets.only(top: padding_16),
                                     child: TextFormFieldWhite(
                                       label: "Password",
                                       isObscure: true,
@@ -125,19 +121,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: TextButton(
                                     style: ButtonStyle(
                                         backgroundColor:
-                                        MaterialStateProperty.all(
-                                            buttonBlue),
+                                            MaterialStateProperty.all(
+                                                buttonBlue),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(
-                                                    radius_12)))),
+                                                    BorderRadius.circular(
+                                                        radius_12)))),
                                     onPressed: () {
                                       if (isValidated != true ||
                                           firstNameController.text.isEmpty ||
                                           lastNameController.text.isEmpty ||
                                           passwordController.text.isEmpty) {
-                                        return null;
+                                        Fluttertoast.showToast(
+                                            msg: "Please fill all of the information",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.grey.withOpacity(0.75),
+                                            textColor: Colors.white,
+                                            timeInSecForIosWeb: 3,
+                                            fontSize: 16.0);
                                       } else {
                                         Navigator.pushReplacementNamed(
                                             context, MainScreen.routeName);
