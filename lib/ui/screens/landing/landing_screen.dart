@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
+import 'package:susmatior_app/ui/screens/register/register_screens.dart';
 
 
 class LandingScreen extends StatelessWidget {
@@ -62,7 +63,9 @@ class LandingScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width / 3,
                     height: 56.0,
                     child: MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, RegisterScreen.routeName);
+                      },
                       color: blueSecondary,
                       elevation: 0,
                       hoverElevation: 0,

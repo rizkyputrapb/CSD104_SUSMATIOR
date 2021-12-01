@@ -14,6 +14,11 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: primaryColor),
+      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraint) {
@@ -23,26 +28,11 @@ class LoginScreen extends StatelessWidget {
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              size: 32,
-                            ),
-                            color: primaryColor,
-                          )
-                        ],
-                      ),
                       Container(
                         margin: const EdgeInsets.all(padding_16),
                         child: Image.asset(
                           'assets/images/img_login_picture.png',
-                          height: MediaQuery.of(context).size.height / 3.3,
+                          height: MediaQuery.of(context).size.height / 3.9,
                         ),
                       ),
                       Expanded(
@@ -89,29 +79,29 @@ class LoginScreen extends StatelessWidget {
                                   ],
                                 ),
                                 TextButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                buttonBlue),
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        radius_12)))),
-                                    onPressed: () => Navigator.pushNamed(
-                                        context, HomeScreen.routeName),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: padding_8, horizontal: 32),
-                                      child: Text(
-                                        "Login",
-                                        style: GoogleFonts.montserrat(
-                                          color: blueTertiary,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(buttonBlue),
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      radius_12)))),
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, HomeScreen.routeName),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: padding_8, horizontal: 32),
+                                    child: Text(
+                                      "Register",
+                                      style: GoogleFonts.montserrat(
+                                        color: blueTertiary,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           ),
