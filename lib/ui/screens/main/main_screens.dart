@@ -20,8 +20,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   final List<Widget> _listWidget = <Widget>[
-    const HomeScreen(),
     const Placeholder(),
+    const HomeScreen(),
     const SettingScreen(),
   ];
   @override
@@ -29,26 +29,26 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: _listWidget[_bottomNavbarIndex],
       bottomNavigationBar: BottomAppBar(
-        color: Color(0xFF428DFF),
+        color: const Color(0xFF428DFF),
         child: SalomonBottomBar(
           items: [
             SalomonBottomBarItem(
-              icon: Icon(
-                Icons.home,
-              ),
-              title: Text('Home'),
-            ),
-            SalomonBottomBarItem(
-              icon: Icon(
+              icon: const Icon(
                 Icons.account_circle,
               ),
-              title: Text('Profile'),
+              title: const Text('Profile'),
             ),
             SalomonBottomBarItem(
-              icon: Icon(
+              icon: const Icon(
+                Icons.home,
+              ),
+              title: const Text('Home'),
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(
                 Icons.settings,
               ),
-              title: Text('Settings'),
+              title: const Text('Settings'),
             ),
           ],
           selectedItemColor: const Color(0xFFBBE1FA),

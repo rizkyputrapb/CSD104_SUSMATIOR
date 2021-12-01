@@ -6,6 +6,7 @@ import 'package:susmatior_app/ui/screens/login/login_screens.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
 import 'package:susmatior_app/ui/screens/setting/setting_screens.dart';
+import 'package:susmatior_app/ui/screens/register/register_screens.dart';
 import 'package:susmatior_app/ui/screens/splash/splash_screen.dart';
 
 void main() {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         SplashScreen.routeName: (context) => const SplashScreen(),
         LandingScreen.routeName: (context) => const LandingScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
+        RegisterScreen.routeName: (context) => const RegisterScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
         SettingScreen.routeName: (context) => const SettingScreen(),
