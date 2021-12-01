@@ -65,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: padding_16),
-                                      child: TextFormFieldWhite(
+                                      child: const TextFormFieldWhite(
                                         label: "Email",
                                         isObscure: false,
                                       ),
@@ -73,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: padding_16),
-                                      child: TextFormFieldWhite(
+                                      child: const TextFormFieldWhite(
                                         label: "Password",
                                         isObscure: true,
                                       ),

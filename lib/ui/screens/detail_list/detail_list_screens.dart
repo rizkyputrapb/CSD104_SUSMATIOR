@@ -24,7 +24,7 @@ class DetailListScreen extends StatelessWidget {
                   minHeight: constraint.maxHeight,
                 ),
                 child: Container(
-                  margin: EdgeInsets.only(
+                  margin: const EdgeInsets.only(
                     top: padding_16,
                     left: padding_16,
                     right: padding_16,
@@ -41,7 +41,7 @@ class DetailListScreen extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      SizedBox(height: padding_8),
+                      const SizedBox(height: padding_8),
                       Text(
                         '081234567891',
                         style: GoogleFonts.montserrat(
@@ -51,7 +51,7 @@ class DetailListScreen extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       Text(
@@ -63,7 +63,7 @@ class DetailListScreen extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_8,
                       ),
                       Text(
@@ -77,7 +77,7 @@ class DetailListScreen extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       Text(
@@ -89,7 +89,7 @@ class DetailListScreen extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_8,
                       ),
                       Text(
@@ -102,7 +102,7 @@ class DetailListScreen extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       Text(
@@ -114,7 +114,7 @@ class DetailListScreen extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_8,
                       ),
                       GridView.count(
@@ -180,31 +180,31 @@ class DetailListScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       Text(
                         'Rapporteur',
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w500,
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_8,
                       ),
                       Text(
                         'John Doe',
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w400,
                           textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                     ],
