@@ -4,6 +4,8 @@ import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
+import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
+import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -79,29 +81,30 @@ class LoginScreen extends StatelessWidget {
                                   ],
                                 ),
                                 TextButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(buttonBlue),
-                                      shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      radius_12)))),
-                                  onPressed: () => Navigator.pushNamed(
-                                      context, HomeScreen.routeName),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: padding_8, horizontal: 32),
-                                    child: Text(
-                                      "Register",
-                                      style: GoogleFonts.montserrat(
-                                        color: blueTertiary,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                buttonBlue),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        radius_12)))),
+                                    onPressed: () =>
+                                        Navigator.pushReplacementNamed(
+                                            context, MainScreen.routeName),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: padding_8, horizontal: 32),
+                                      child: Text(
+                                        "Login",
+                                        style: GoogleFonts.montserrat(
+                                          color: blueTertiary,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                )
+                                    ))
                               ],
                             ),
                           ),
