@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:susmatior_app/ui/screens/account/account_screens.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/setting/setting_screens.dart';
 
@@ -14,7 +15,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _bottomNavbarIndex = 0;
+  int _bottomNavbarIndex = 1;
   late User? currentUser;
 
   void _onItemTap(int index) {
@@ -34,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   final List<Widget> _listWidget = <Widget>[
-    const Placeholder(),
+    const AccountScreen(),
     const HomeScreen(),
     const SettingScreen(),
   ];
