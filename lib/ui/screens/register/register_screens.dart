@@ -169,9 +169,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 .emailAlreadyExists:
                                               Fluttertoast.showToast(
                                                   msg:
-                                                  "Email already registered!",
+                                                      "Email already registered!",
                                                   toastLength:
-                                                  Toast.LENGTH_SHORT,
+                                                      Toast.LENGTH_SHORT,
                                                   gravity: ToastGravity.BOTTOM,
                                                   backgroundColor: Colors.grey
                                                       .withOpacity(0.75),
@@ -182,9 +182,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             case AuthResultStatus.invalidEmail:
                                               Fluttertoast.showToast(
                                                   msg:
-                                                  "Please insert a valid email address!",
+                                                      "Please insert a valid email address!",
                                                   toastLength:
-                                                  Toast.LENGTH_SHORT,
+                                                      Toast.LENGTH_SHORT,
                                                   gravity: ToastGravity.BOTTOM,
                                                   backgroundColor: Colors.grey
                                                       .withOpacity(0.75),
@@ -195,10 +195,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             case AuthResultStatus
                                                 .operationNotAllowed:
                                               Fluttertoast.showToast(
-                                                  msg:
-                                                  "Operation not allowed!",
+                                                  msg: "Operation not allowed!",
                                                   toastLength:
-                                                  Toast.LENGTH_SHORT,
+                                                      Toast.LENGTH_SHORT,
                                                   gravity: ToastGravity.BOTTOM,
                                                   backgroundColor: Colors.grey
                                                       .withOpacity(0.75),
