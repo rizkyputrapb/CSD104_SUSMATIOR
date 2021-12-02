@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/setting/setting_screens.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class MainScreen extends StatefulWidget {
   static const routeName = '/main_screen';
+
   const MainScreen({Key? key}) : super(key: key);
 
   @override
@@ -13,10 +15,22 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _bottomNavbarIndex = 0;
+  late User? currentUser;
+
   void _onItemTap(int index) {
     setState(() {
       _bottomNavbarIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
+
+  void getUser() async {
+    currentUser = FirebaseAuth.instance.currentUser;
   }
 
   final List<Widget> _listWidget = <Widget>[
@@ -24,8 +38,10 @@ class _MainScreenState extends State<MainScreen> {
     const HomeScreen(),
     const SettingScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
+    print("current logged in user: ${currentUser!.email}");
     return Scaffold(
       body: _listWidget[_bottomNavbarIndex],
       bottomNavigationBar: BottomAppBar(

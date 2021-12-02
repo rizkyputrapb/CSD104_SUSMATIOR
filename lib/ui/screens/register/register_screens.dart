@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,10 +20,17 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isValidated = false;
+  late FirebaseAuth auth;
   TextEditingController emailController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    auth = FirebaseAuth.instance;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,16 +142,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           lastNameController.text.isEmpty ||
                                           passwordController.text.isEmpty) {
                                         Fluttertoast.showToast(
-                                            msg: "Please fill all of the information",
+                                            msg:
+                                                "Please fill all of the information",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
-                                            backgroundColor: Colors.grey.withOpacity(0.75),
+                                            backgroundColor:
+                                                Colors.grey.withOpacity(0.75),
                                             textColor: Colors.white,
                                             timeInSecForIosWeb: 3,
                                             fontSize: 16.0);
                                       } else {
-                                        Navigator.pushReplacementNamed(
-                                            context, MainScreen.routeName);
+                                        try {
+                                          FirebaseAuth.instance
+                                                  .createUserWithEmailAndPassword(
+                                                      email:
+                                                          emailController.text,
+                                                      password:
+                                                          passwordController
+                                                              .text);
+                                          Navigator.pushReplacementNamed(
+                                              context, MainScreen.routeName);
+                                        } on FirebaseAuthException catch (e) {
+                                          if (e.code == 'weak-password') {
+                                            print(
+                                                'The password provided is too weak.');
+                                          } else if (e.code ==
+                                              'email-already-in-use') {
+                                            print(
+                                                'The account already exists for that email.');
+                                          }
+                                        } catch (e) {
+                                          print(e);
+                                        }
                                       }
                                     },
                                     child: Padding(
