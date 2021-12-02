@@ -15,7 +15,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _bottomNavbarIndex = 0;
+  int _bottomNavbarIndex = 1;
   late User? currentUser;
 
   void _onItemTap(int index) {
