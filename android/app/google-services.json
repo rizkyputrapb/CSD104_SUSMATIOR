@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "324292862713",
+    "project_id": "susmatior-b4871",
+    "storage_bucket": "susmatior-b4871.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324292862713:android:970363cc68be43866e3828",
+        "android_client_info": {
+          "package_name": "com.example.susmatior_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324292862713-7g1f1bts3tcc95sks9f0c7qvtuj1d94n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpiiji01h4cQrfVmn5Mvj__ymqJsdkNUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324292862713-7g1f1bts3tcc95sks9f0c7qvtuj1d94n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
