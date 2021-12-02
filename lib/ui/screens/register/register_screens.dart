@@ -1,12 +1,15 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:susmatior_app/constants/authstatus_enum.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
+import 'package:susmatior_app/ui/util/firebase_auth_helper.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -19,10 +22,17 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isValidated = false;
+  late FirebaseAuth auth;
   TextEditingController emailController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    auth = FirebaseAuth.instance;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,16 +144,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           lastNameController.text.isEmpty ||
                                           passwordController.text.isEmpty) {
                                         Fluttertoast.showToast(
-                                            msg: "Please fill all of the information",
+                                            msg:
+                                                "Please fill all of the information",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
-                                            backgroundColor: Colors.grey.withOpacity(0.75),
+                                            backgroundColor:
+                                                Colors.grey.withOpacity(0.75),
                                             textColor: Colors.white,
                                             timeInSecForIosWeb: 3,
                                             fontSize: 16.0);
                                       } else {
-                                        Navigator.pushReplacementNamed(
-                                            context, MainScreen.routeName);
+                                        FirebaseAuthHelper()
+                                            .createAccount(
+                                                email: emailController.text,
+                                                pass: passwordController.text)
+                                            .then((status) {
+                                          switch (status) {
+                                            case AuthResultStatus.successful:
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  MainScreen.routeName);
+                                              break;
+                                            case AuthResultStatus
+                                                .emailAlreadyExists:
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                  "Email already registered!",
+                                                  toastLength:
+                                                  Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                              break;
+                                            case AuthResultStatus.invalidEmail:
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                  "Please insert a valid email address!",
+                                                  toastLength:
+                                                  Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                              break;
+                                            case AuthResultStatus
+                                                .operationNotAllowed:
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                  "Operation not allowed!",
+                                                  toastLength:
+                                                  Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                              break;
+                                            case AuthResultStatus.undefined:
+                                              // TODO: Handle this case.
+                                              break;
+                                          }
+                                        });
                                       }
                                     },
                                     child: Padding(

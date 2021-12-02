@@ -2,11 +2,13 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:susmatior_app/constants/authstatus_enum.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
+import 'package:susmatior_app/ui/util/firebase_auth_helper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -45,10 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.all(padding_16),
                         child: Image.asset(
                           'assets/images/img_login_picture.png',
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height / 3.9,
+                          height: MediaQuery.of(context).size.height / 3.9,
                         ),
                       ),
                       Expanded(
@@ -95,28 +94,66 @@ class _LoginScreenState extends State<LoginScreen> {
                                 TextButton(
                                     style: ButtonStyle(
                                         backgroundColor:
-                                        MaterialStateProperty.all(
-                                            buttonBlue),
+                                            MaterialStateProperty.all(
+                                                buttonBlue),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(
-                                                    radius_12)))),
-                                    onPressed: () {
+                                                    BorderRadius.circular(
+                                                        radius_12)))),
+                                    onPressed: () async {
                                       if (isValidated != true ||
                                           passwordController.text.isEmpty) {
                                         Fluttertoast.showToast(
-                                            msg: "Please fill all of the information",
+                                            msg:
+                                                "Please fill all of the information",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
-                                            backgroundColor: Colors.grey
-                                                .withOpacity(0.75),
+                                            backgroundColor:
+                                                Colors.grey.withOpacity(0.75),
                                             textColor: Colors.white,
                                             timeInSecForIosWeb: 3,
                                             fontSize: 16.0);
                                       } else {
-                                        Navigator.pushReplacementNamed(
-                                            context, MainScreen.routeName);
+                                        FirebaseAuthHelper()
+                                            .login(
+                                                email: emailController.text,
+                                                pass: passwordController.text)
+                                            .then((status) {
+                                          switch (status) {
+                                            case AuthResultStatus.successful:
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  MainScreen.routeName);
+                                              break;
+                                            case AuthResultStatus.wrongPassword:
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Please insert the correct password!",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                              break;
+                                            case AuthResultStatus.userNotFound:
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "User is not registered yet!",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                              break;
+                                          }
+                                        });
                                       }
                                     },
                                     child: Padding(
