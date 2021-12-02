@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/ui/screens/account/widgets/card_avatar_widget.dart';
@@ -20,12 +21,13 @@ class AccountScreen extends StatelessWidget {
         children: [
           CardAvatarAccount(
             imageUserAccount: 'assets/icons/ic_user_scam.png',
-            titleText: 'John Doe',
+            titleText:
+                FirebaseAuth.instance.currentUser!.displayName.toString(),
             childText: 'Change Photo Profile',
           ),
           CardAccount(
             titleText: 'Email',
-            childText: 'abcdef@gmail.com',
+            childText: FirebaseAuth.instance.currentUser!.email.toString(),
           ),
           Padding(
             padding: const EdgeInsets.all(padding_8),
