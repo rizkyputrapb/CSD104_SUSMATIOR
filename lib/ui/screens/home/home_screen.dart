@@ -82,11 +82,11 @@ class HomeScreen extends StatelessWidget {
               // Change this listview to listview.builder if using firebase
               child: ListView(
                 children: [
-                  InkWell(
-                    onTap: () => Navigator.pushNamed(
-                        context, DetailListScreen.routeName),
-                    child: CardListScam(),
-                  )
+                  CardListScam(
+                    onTap: () {
+                      Navigator.pushNamed(context, DetailListScreen.routeName);
+                    },
+                  ),
                 ],
               ),
             ),

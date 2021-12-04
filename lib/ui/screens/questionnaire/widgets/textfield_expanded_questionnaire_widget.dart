@@ -6,10 +6,12 @@ class TextFormFieldExpandedBlue extends StatelessWidget {
     Key? key,
     required this.label,
     required this.isObscure,
+    required this.controller,
   }) : super(key: key);
 
   String label;
   bool isObscure;
+  TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class TextFormFieldExpandedBlue extends StatelessWidget {
       cursorColor: Color(0xFF2F2E41),
       keyboardType: TextInputType.multiline,
       maxLines: null,
+      controller: controller,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: GoogleFonts.montserrat(color: Color(0xFF428DFF)),
