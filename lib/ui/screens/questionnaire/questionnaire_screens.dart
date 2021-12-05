@@ -23,7 +23,7 @@ class QuestionnaireScreen extends StatefulWidget {
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   String _radioSelected = 'radioSeleted';
   // late XFile _image;
-  late String imagePath;
+  Future<XFile?>? imageFile;
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -33,20 +33,70 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     TextEditingController descriptionController = TextEditingController();
 
     Future<XFile?> _imgFromGallery() async {
-      return await ImagePicker().pickImage(source: ImageSource.gallery);
-
+      setState(() {
+        imageFile = ImagePicker().pickImage(source: ImageSource.gallery);
+      });
+      return await imageFile;
       // setState(() {
       //   _image = image as XFile;
       // });
     }
 
+    // Future<String> uploadImage(XFile imageFile) async {
+    //   String filename = basename(imageFile.path);
+    //   Reference ref = FirebaseStorage.instance.ref().child(filename);
+    //   UploadTask task = ref.putFile(File(imageFile.path));
+    //   TaskSnapshot snapshot = await task;
+
+    //   return await snapshot.ref.getDownloadURL();
+    // }
     Future<String> uploadImage(XFile imageFile) async {
       String filename = basename(imageFile.path);
-      Reference ref = FirebaseStorage.instance.ref().child(filename);
-      UploadTask task = ref.putFile(File(imageFile.path));
-      TaskSnapshot snapshot = await task;
+      // Reference ref = FirebaseStorage.instance.ref().child(filename);
+      // UploadTask task = ref.putFile(File(imageFile.path));
+      // TaskSnapshot snapshot = await task;
 
-      return await snapshot.ref.getDownloadURL();
+      // String url = await snapshot.ref.getDownloadURL();
+      // print(url);
+      return filename;
+    }
+
+    Future<String> uploadImages(String path) async {
+      XFile? imageFilee = await imageFile;
+      String filename = basename(imageFilee!.path);
+      Future<String> img = uploadImage(XFile(filename.toString()));
+      Reference ref = FirebaseStorage.instance.ref().child(await img);
+      UploadTask task = ref.putFile(File(imageFilee.path));
+      TaskSnapshot snapshot = await task;
+      String url = await snapshot.ref.getDownloadURL();
+      print(url);
+      return url;
+    }
+
+    Widget showImage() {
+      return FutureBuilder<XFile?>(
+        future: imageFile,
+        builder: (BuildContext context, AsyncSnapshot<XFile?> snapshot) {
+          if (snapshot.data != null) {
+            return Image.file(
+              File(
+                snapshot.data!.path,
+              ),
+              fit: BoxFit.cover,
+            );
+          } else if (snapshot.error != null) {
+            return const Text(
+              'Error Picking Image',
+              textAlign: TextAlign.center,
+            );
+          } else {
+            return const Text(
+              'No Image Selected',
+              textAlign: TextAlign.center,
+            );
+          }
+        },
+      );
     }
 
     return Scaffold(
@@ -201,10 +251,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                             //   ),
                           ),
                           Card(
-                            child: IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () {},
-                            ),
+                            child: showImage(),
                           ),
                         ],
                       ),
@@ -214,8 +261,11 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       InkWell(
                         onTap: () async {
                           // XFile? file = await _imgFromGallery();
-                          XFile? file = await _imgFromGallery();
-                          String imagePath = await uploadImage(file!);
+                          // XFile? file = await _imgFromGallery();
+                          // String imagePath = await uploadImage(file!);
+                          String imagePath =
+                              await uploadImages(imageFile.toString());
+
                           dataScam.add({
                             'pnumber': phoneNumberController.text,
                             'description': descriptionController.text,
