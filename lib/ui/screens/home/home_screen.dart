@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
@@ -11,6 +11,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference dataScam = firestore.collection('data-scams');
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -82,9 +85,28 @@ class HomeScreen extends StatelessWidget {
               // Change this listview to listview.builder if using firebase
               child: ListView(
                 children: [
-                  CardListScam(
-                    onTap: () {
-                      Navigator.pushNamed(context, DetailListScreen.routeName);
+                  StreamBuilder<dynamic>(
+                    stream: dataScam.snapshots(),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasData) {
+                        return Column(
+                          children: snapshot.data.docs
+                              .map<Widget>(
+                                (e) => CardListScam(
+                                  title: e.data()['pnumber'],
+                                  description: e.data()['description'],
+                                  status: e.data()['status'],
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, DetailListScreen.routeName);
+                                  },
+                                ),
+                              )
+                              .toList(),
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
                     },
                   ),
                 ],

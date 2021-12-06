@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
+import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_expanded_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
@@ -62,11 +63,11 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     }
 
     Future<String> uploadImages(String path) async {
-      XFile? imageFilee = await imageFile;
-      String filename = basename(imageFilee!.path);
+      XFile? imagePath = await imageFile;
+      String filename = basename(imagePath!.path);
       Future<String> img = uploadImage(XFile(filename.toString()));
       Reference ref = FirebaseStorage.instance.ref().child(await img);
-      UploadTask task = ref.putFile(File(imageFilee.path));
+      UploadTask task = ref.putFile(File(imagePath.path));
       TaskSnapshot snapshot = await task;
       String url = await snapshot.ref.getDownloadURL();
       print(url);
@@ -272,6 +273,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                             'status': _radioSelected,
                             'image': imagePath,
                           });
+
+                          Navigator.pushReplacementNamed(
+                              context, MainScreen.routeName);
                         },
                         child: ButtonRectangleExpanded(
                           textButton: 'Submit Report',

@@ -6,7 +6,13 @@ class CardListScam extends StatelessWidget {
   CardListScam({
     Key? key,
     required this.onTap,
+    required this.title,
+    required this.description,
+    required this.status,
   }) : super(key: key);
+  String title;
+  String description;
+  String status;
   final GestureTapCallback onTap;
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class CardListScam extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'This is text title',
+                        title,
                         style: GoogleFonts.montserrat(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w500,
@@ -58,7 +64,7 @@ class CardListScam extends StatelessWidget {
                         height: 8.0,
                       ),
                       Text(
-                        'This number is a fraud, ignore this number if you This number is a fraud, ignore this number if you This number is a fraud, ignore this number if you',
+                        description,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: GoogleFonts.montserrat(
@@ -75,7 +81,7 @@ class CardListScam extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Not Scam',
+                    status,
                     style: GoogleFonts.montserrat(
                       fontSize: 12.0,
                       color: Color(0xFF428DFF),
