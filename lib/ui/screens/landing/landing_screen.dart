@@ -63,7 +63,8 @@ class LandingScreen extends StatelessWidget {
                     height: 56.0,
                     child: MaterialButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, RegisterScreen.routeName);
+                        Navigator.pushReplacementNamed(
+                            context, RegisterScreen.routeName);
                       },
                       color: blueSecondary,
                       elevation: 0,

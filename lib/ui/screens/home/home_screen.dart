@@ -105,7 +105,11 @@ class HomeScreen extends StatelessWidget {
                               .toList(),
                         );
                       } else {
-                        return const CircularProgressIndicator();
+                        return Column(
+                          children: [
+                            const CircularProgressIndicator(),
+                          ],
+                        );
                       }
                     },
                   ),

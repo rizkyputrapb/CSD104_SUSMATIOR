@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,6 +17,7 @@ class CardAvatarAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
     return Card(
       elevation: 0.0,
       color: Color(0xFFECF0F1),
@@ -48,13 +51,38 @@ class CardAvatarAccount extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      titleText,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF2F2E41),
-                      ),
+                    FutureBuilder<dynamic>(
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user!.uid)
+                          .get(),
+                      builder: (_, snapshot) {
+                        if (snapshot.hasData) {
+                          return RichText(
+                              text: TextSpan(
+                            text: snapshot.data['firstname'] + ' ',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF2F2E41),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: snapshot.data['lastname'],
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 19.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF2F2E41),
+                                ),
+                              ),
+                            ],
+                          ));
+                        } else if (snapshot.hasError) {
+                          return Text('Unknown');
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 8.0,
