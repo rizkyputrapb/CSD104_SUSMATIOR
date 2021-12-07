@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +159,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             .createAccount(
                                                 email: emailController.text,
                                                 pass: passwordController.text)
-                                            .then((status) {
+                                            .then((status) async {
+                                          User? user =
+                                              FirebaseAuth.instance.currentUser;
+                                          await FirebaseFirestore.instance
+                                              .collection("users")
+                                              .doc(user!.uid)
+                                              .set({
+                                            'uid': user.uid,
+                                            'email': emailController.text,
+                                            'password': passwordController
+                                                .text.hashCode,
+                                            'firstname':
+                                                firstNameController.text,
+                                            'lastname': lastNameController.text,
+                                          });
                                           switch (status) {
                                             case AuthResultStatus.successful:
                                               Navigator.pushReplacementNamed(

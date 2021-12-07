@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/ui/screens/account/widgets/card_avatar_widget.dart';
 import 'package:susmatior_app/ui/screens/account/widgets/card_widget.dart';
+import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
@@ -34,7 +35,8 @@ class AccountScreen extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 FirebaseAuthHelper().logout();
-                Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+                Navigator.pushReplacementNamed(
+                    context, LandingScreen.routeName);
               },
               child: ButtonRectangleExpanded(textButton: 'Logout'),
             ),
