@@ -4,10 +4,17 @@ import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/home_screen';
 
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String searchKeyword = "";
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +60,11 @@ class HomeScreen extends StatelessWidget {
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        onFieldSubmitted: (value) {},
+                        onChanged: (value) {
+                          setState(() {
+                            searchKeyword = value;
+                          });
+                        },
                       ),
                     ),
                     SizedBox(
@@ -83,37 +94,42 @@ class HomeScreen extends StatelessWidget {
             ),
             Expanded(
               // Change this listview to listview.builder if using firebase
-              child: ListView(
-                children: [
-                  StreamBuilder<dynamic>(
-                    stream: dataScam.snapshots(),
-                    builder: (_, snapshot) {
-                      if (snapshot.hasData) {
-                        return Column(
-                          children: snapshot.data.docs
-                              .map<Widget>(
-                                (e) => CardListScam(
-                                  title: e.data()['pnumber'],
-                                  description: e.data()['description'],
-                                  status: e.data()['status'],
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, DetailListScreen.routeName);
-                                  },
-                                ),
-                              )
-                              .toList(),
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            const CircularProgressIndicator(),
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                ],
+              child: StreamBuilder<dynamic>(
+                stream: (searchKeyword != "" && searchKeyword != null)
+                    ? dataScam
+                        .where('search-key', arrayContains: searchKeyword)
+                        .snapshots()
+                    : dataScam.snapshots(),
+                builder: (_, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (_, index) {
+                          DocumentSnapshot data = snapshot.data.docs[index];
+                          return Column(
+                            children: [
+                              CardListScam(
+                                title: data['pnumber'],
+                                description: data['description'],
+                                status: data['status'],
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, DetailListScreen.routeName);
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  } else {
+                    return Column(
+                      children: [
+                        const CircularProgressIndicator(),
+                      ],
+                    );
+                  }
+                },
               ),
             ),
           ],
