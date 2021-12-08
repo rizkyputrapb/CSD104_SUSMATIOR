@@ -100,6 +100,16 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
       );
     }
 
+    setSearchKey(String phoneNumber) {
+      List<String> searchValueList = [];
+      String temp = "";
+      for (int i = 0; i < phoneNumber.length; i++) {
+        temp = temp + phoneNumber[i];
+        searchValueList.add(temp);
+      }
+      return searchValueList;
+    }
+
     return Scaffold(
       appBar: AppBarPrimary(
         textTitle: 'Report Case',
@@ -272,6 +282,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                             'description': descriptionController.text,
                             'status': _radioSelected,
                             'image': imagePath,
+                            'search-key':
+                                setSearchKey(phoneNumberController.text),
                           });
 
                           Navigator.pushReplacementNamed(
