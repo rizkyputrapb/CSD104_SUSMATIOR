@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ImageDialog extends StatelessWidget {
@@ -9,16 +10,11 @@ class ImageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: ExactAssetImage(
-              assetName,
-            ),
-            fit: BoxFit.fill,
-          ),
+      child: Hero(
+        tag: assetName,
+        child: CachedNetworkImage(
+          imageUrl: assetName,
+          fit: BoxFit.contain,
         ),
       ),
     );

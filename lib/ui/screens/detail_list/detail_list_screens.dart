@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -170,20 +171,31 @@ class _DetailListScreenState extends State<DetailListScreen> {
                           Card(
                             clipBehavior: Clip.antiAlias,
                             child: GestureDetector(
-                                onTap: () async {
-                                  await showDialog(
-                                    context: context,
-                                    builder: (_) => ImageDialog(
-                                      assetName: data['image'],
-                                    ),
-                                  );
-                                },
-                                child: Image.network(
-                                  data['image'],
+                              onTap: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (_) => ImageDialog(
+                                    assetName: data['image'],
+                                  ),
+                                );
+                              },
+                              child: Hero(
+                                tag: data['image'],
+                                child: CachedNetworkImage(
+                                  imageUrl: data['image'],
                                   fit: BoxFit.cover,
                                   width: MediaQuery.of(context).size.width,
                                   height: MediaQuery.of(context).size.height,
-                                )),
+                                  errorWidget: (context, url, error) {
+                                    print(error);
+                                    return const Icon(Icons.error);
+                                  },
+                                  placeholder: (context, url) {
+                                    return const Center(child: CircularProgressIndicator(),);
+                                  },
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
