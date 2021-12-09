@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               // Change this listview to listview.builder if using firebase
               child: StreamBuilder<dynamic>(
-                stream: (searchKeyword != "" && searchKeyword != null)
+                stream: (searchKeyword != "" && searchKeyword.isNotEmpty)
                     ? dataScam
                         .where('search-key', arrayContains: searchKeyword)
                         .snapshots()
@@ -115,8 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 description: data['description'],
                                 status: data['status'],
                                 onTap: () {
+                                  print("id = ${data.id}");
                                   Navigator.pushNamed(
-                                      context, DetailListScreen.routeName);
+                                      context, DetailListScreen.routeName,
+                                      arguments: data.id);
                                 },
                               ),
                             ],
@@ -124,8 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
                   } else {
                     return Column(
-                      children: [
-                        const CircularProgressIndicator(),
+                      children: const [
+                        CircularProgressIndicator(),
                       ],
                     );
                   }

@@ -10,7 +10,7 @@ import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
-import 'package:susmatior_app/ui/util/firebase_auth_helper.dart';
+import 'package:susmatior_app/util/firebase_auth_helper.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

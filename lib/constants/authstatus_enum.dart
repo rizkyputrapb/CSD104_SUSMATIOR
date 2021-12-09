@@ -1,4 +1,5 @@
 enum AuthResultStatus {
+  loading,
   successful,
   emailAlreadyExists,
   wrongPassword,
