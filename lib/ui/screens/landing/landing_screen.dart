@@ -1,15 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
+import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/register/register_screens.dart';
 
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   static const routeName = '/landing_screen';
 
   const LandingScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  @override
+  void initState() {
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        Navigator.pushReplacementNamed(
+            context,
+            MainScreen.routeName);
+      }
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

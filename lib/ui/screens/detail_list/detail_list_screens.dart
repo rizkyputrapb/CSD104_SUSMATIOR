@@ -1,28 +1,75 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/ui/screens/detail_list/widgets/image_dialog_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 
-class DetailListScreen extends StatelessWidget {
+class DetailListScreen extends StatefulWidget {
   static const routeName = '/detail_list_screen';
 
-  const DetailListScreen({Key? key}) : super(key: key);
+  const DetailListScreen({Key? key, required this.docId}) : super(key: key);
+
+  final String? docId;
+
+  @override
+  State<DetailListScreen> createState() => _DetailListScreenState();
+}
+
+class _DetailListScreenState extends State<DetailListScreen> {
+  late SnackBar snackbarEmpty;
+  late SnackBar snackbarError;
+
+  @override
+  void initState() {
+    snackbarEmpty = const SnackBar(
+      content: Text("Data does not exist!"),
+    );
+    snackbarError = const SnackBar(
+      content: Text("There is something wrong!"),
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference dataScams =
+        FirebaseFirestore.instance.collection('data-scams');
+    print("selected docId: ${widget.docId}");
     return Scaffold(
       appBar: AppBarPrimary(
         textTitle: 'Detail Report',
       ),
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraint.maxHeight,
-                ),
+        child: FutureBuilder<DocumentSnapshot>(
+          future: dataScams.doc(widget.docId).get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              Fluttertoast.showToast(
+                  msg: "Data does not exist!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.grey.withOpacity(0.75),
+                  textColor: Colors.white,
+                  timeInSecForIosWeb: 3,
+                  fontSize: 16.0);
+              return SizedBox();
+            } else if (snapshot.hasError) {
+              Fluttertoast.showToast(
+                  msg: "There is an error occured!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.grey.withOpacity(0.75),
+                  textColor: Colors.white,
+                  timeInSecForIosWeb: 3,
+                  fontSize: 16.0);
+              return SizedBox();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+              return SingleChildScrollView(
                 child: Container(
                   margin: const EdgeInsets.only(
                     top: padding_16,
@@ -43,7 +90,7 @@ class DetailListScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: padding_8),
                       Text(
-                        '081234567891',
+                        data['pnumber'],
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
                           color: Color(0xFF2F2E41),
@@ -67,7 +114,7 @@ class DetailListScreen extends StatelessWidget {
                         height: padding_8,
                       ),
                       Text(
-                        'Telephone scammers try to steal your money or personal information. Scams may come through phone calls from real people, robocalls, or text messages. Callers often make false promises, such as opportunities to buy products, invest your money, or receive free product trials. They may also offer you money through free grants and lotteries.',
+                        data['description'],
                         textAlign: TextAlign.justify,
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
@@ -93,7 +140,7 @@ class DetailListScreen extends StatelessWidget {
                         height: padding_8,
                       ),
                       Text(
-                        'Scam',
+                        data['status'],
                         textAlign: TextAlign.justify,
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
@@ -128,53 +175,25 @@ class DetailListScreen extends StatelessWidget {
                                 await showDialog(
                                   context: context,
                                   builder: (_) => ImageDialog(
-                                    assetName: 'assets/images/img_sample.jpg',
+                                    assetName: data['image'],
                                   ),
                                 );
                               },
-                              child: Image.asset(
-                                'assets/images/img_sample.jpg',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                              ),
-                            ),
-                          ),
-                          Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await showDialog(
-                                  context: context,
-                                  builder: (_) => ImageDialog(
-                                    assetName: 'assets/images/img_sample.jpg',
-                                  ),
-                                );
-                              },
-                              child: Image.asset(
-                                'assets/images/img_sample.jpg',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                              ),
-                            ),
-                          ),
-                          Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await showDialog(
-                                  context: context,
-                                  builder: (_) => ImageDialog(
-                                    assetName: 'assets/images/img_sample.jpg',
-                                  ),
-                                );
-                              },
-                              child: Image.asset(
-                                'assets/images/img_sample.jpg',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
+                              child: Hero(
+                                tag: data['image'],
+                                child: CachedNetworkImage(
+                                  imageUrl: data['image'],
+                                  fit: BoxFit.cover,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  errorWidget: (context, url, error) {
+                                    print(error);
+                                    return const Icon(Icons.error);
+                                  },
+                                  placeholder: (context, url) {
+                                    return const Center(child: CircularProgressIndicator(),);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -183,34 +202,13 @@ class DetailListScreen extends StatelessWidget {
                       const SizedBox(
                         height: padding_16,
                       ),
-                      Text(
-                        'Rapporteur',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 18.0,
-                          color: const Color(0xFF2F2E41),
-                          fontWeight: FontWeight.w500,
-                          textStyle: Theme.of(context).textTheme.headline1,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: padding_8,
-                      ),
-                      Text(
-                        'John Doe',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 18.0,
-                          color: const Color(0xFF2F2E41),
-                          fontWeight: FontWeight.w400,
-                          textStyle: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: padding_16,
-                      ),
                     ],
                   ),
                 ),
-              ),
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           },
         ),

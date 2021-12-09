@@ -7,7 +7,7 @@ import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
-import 'package:susmatior_app/ui/util/firebase_auth_helper.dart';
+import 'package:susmatior_app/util/firebase_auth_helper.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({Key? key}) : super(key: key);

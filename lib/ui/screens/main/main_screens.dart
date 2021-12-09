@@ -42,7 +42,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("current logged in user: ${currentUser!.email}");
     return Scaffold(
       body: _listWidget[_bottomNavbarIndex],
       bottomNavigationBar: BottomAppBar(
