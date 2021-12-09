@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
+import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_expanded_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questionnaire_widget.dart';
@@ -22,9 +23,10 @@ class QuestionnaireScreen extends StatefulWidget {
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
-  String _radioSelected = 'radioSeleted';
-  // late XFile _image;
+  String _radioSelected = '';
   Future<XFile?>? imageFile;
+  List<Object> images = <Object>[];
+
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -38,27 +40,10 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         imageFile = ImagePicker().pickImage(source: ImageSource.gallery);
       });
       return await imageFile;
-      // setState(() {
-      //   _image = image as XFile;
-      // });
     }
 
-    // Future<String> uploadImage(XFile imageFile) async {
-    //   String filename = basename(imageFile.path);
-    //   Reference ref = FirebaseStorage.instance.ref().child(filename);
-    //   UploadTask task = ref.putFile(File(imageFile.path));
-    //   TaskSnapshot snapshot = await task;
-
-    //   return await snapshot.ref.getDownloadURL();
-    // }
     Future<String> uploadImage(XFile imageFile) async {
       String filename = basename(imageFile.path);
-      // Reference ref = FirebaseStorage.instance.ref().child(filename);
-      // UploadTask task = ref.putFile(File(imageFile.path));
-      // TaskSnapshot snapshot = await task;
-
-      // String url = await snapshot.ref.getDownloadURL();
-      // print(url);
       return filename;
     }
 
@@ -79,11 +64,34 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         future: imageFile,
         builder: (BuildContext context, AsyncSnapshot<XFile?> snapshot) {
           if (snapshot.data != null) {
-            return Image.file(
-              File(
-                snapshot.data!.path,
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(4.0),
+              child: Stack(
+                children: [
+                  Image.file(
+                    File(
+                      snapshot.data!.path,
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    right: 5,
+                    top: 5,
+                    child: InkWell(
+                      child: Icon(
+                        Icons.change_circle,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                      onTap: () async {
+                        XFile? file = await _imgFromGallery();
+                        await uploadImage(file!);
+                      },
+                    ),
+                  )
+                ],
               ),
-              fit: BoxFit.cover,
             );
           } else if (snapshot.error != null) {
             return const Text(
@@ -91,9 +99,12 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
               textAlign: TextAlign.center,
             );
           } else {
-            return const Text(
-              'No Image Selected',
-              textAlign: TextAlign.center,
+            return IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () async {
+                XFile? file = await _imgFromGallery();
+                await uploadImage(file!);
+              },
             );
           }
         },
@@ -134,7 +145,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         isObscure: false,
                         controller: phoneNumberController,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       TextFormFieldExpandedBlue(
@@ -142,7 +153,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         isObscure: false,
                         controller: descriptionController,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       Text(
@@ -191,9 +202,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                       _radioSelected = value as String;
                                     });
                                   },
-                                  activeColor: Color(0xFF428DFF),
+                                  activeColor: const Color(0xFF428DFF),
                                   fillColor: MaterialStateColor.resolveWith(
-                                    (states) => Color(0xFF428DFF),
+                                    (states) => const Color(0xFF428DFF),
                                   ),
                                 ),
                               ),
@@ -205,7 +216,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       Text(
@@ -215,54 +226,23 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_12,
                       ),
-                      GridView.count(
-                        shrinkWrap: true,
-                        crossAxisCount: 3,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: Stack(
-                              children: [
-                                // Image
-                                Placeholder(),
-                                Positioned(
-                                  right: 5,
-                                  top: 5,
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.remove_circle,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          Material(
+                            elevation: 2,
+                            borderRadius: BorderRadius.circular(radius_12),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 5,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(radius_12),
+                              ),
+                              child: showImage(),
                             ),
-                          ),
-                          Card(
-                            child: IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () async {
-                                XFile? file = await _imgFromGallery();
-                                await uploadImage(file!);
-                                // setState(() {});
-                              },
-                            ),
-                            // : ClipRRect(
-                            //     borderRadius: BorderRadius.circular(50),
-                            //     child: Image.file(
-                            //       _image as File,
-                            //       width: 100,
-                            //       height: 100,
-                            //       fit: BoxFit.fitHeight,
-                            //     ),
-                            //   ),
-                          ),
-                          Card(
-                            child: showImage(),
                           ),
                         ],
                       ),
@@ -271,9 +251,6 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       ),
                       InkWell(
                         onTap: () async {
-                          // XFile? file = await _imgFromGallery();
-                          // XFile? file = await _imgFromGallery();
-                          // String imagePath = await uploadImage(file!);
                           String imagePath =
                               await uploadImages(imageFile.toString());
 

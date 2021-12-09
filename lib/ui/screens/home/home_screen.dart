@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
@@ -14,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String searchKeyword = "";
+  TextEditingController searchKeyword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Flexible(
                       child: TextFormField(
+                        controller: searchKeyword,
                         cursorColor: Colors.white,
                         maxLines: 1,
                         keyboardType: TextInputType.number,
@@ -60,10 +62,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            searchKeyword = value;
-                          });
+                        onFieldSubmitted: (value) {
+                          setState(
+                            () {
+                              searchKeyword.text = value;
+                              searchKeyword.selection =
+                                  TextSelection.fromPosition(
+                                TextPosition(
+                                  offset: searchKeyword.text.length,
+                                ),
+                              );
+                            },
+                          );
                         },
                       ),
                     ),
@@ -94,36 +104,48 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               // Change this listview to listview.builder if using firebase
-              child: StreamBuilder<dynamic>(
-                stream: (searchKeyword != "" && searchKeyword.isNotEmpty)
+              child: StreamBuilder<QuerySnapshot<dynamic>>(
+                stream: (searchKeyword.text != "" &&
+                        searchKeyword.text.isNotEmpty)
                     ? dataScam
-                        .where('search-key', arrayContains: searchKeyword)
+                        .where('search-key', arrayContains: searchKeyword.text)
                         .snapshots()
-                    : dataScam.snapshots(),
+                    : dataScam.limit(10).snapshots(),
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (_, index) {
-                          DocumentSnapshot data = snapshot.data.docs[index];
-                          return Column(
-                            children: [
-                              CardListScam(
-                                title: data['pnumber'],
-                                description: data['description'],
-                                status: data['status'],
-                                onTap: () {
-                                  print("id = ${data.id}");
-                                  Navigator.pushNamed(
-                                      context, DetailListScreen.routeName,
-                                      arguments: data.id);
-                                },
+                    return AnimationLimiter(
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (_, index) {
+                            DocumentSnapshot data = snapshot.data!.docs[index];
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: Column(
+                                    children: [
+                                      CardListScam(
+                                        title: data['pnumber'],
+                                        description: data['description'],
+                                        status: data['status'],
+                                        onTap: () {
+                                          print("id = ${data.id}");
+                                          Navigator.pushNamed(context,
+                                              DetailListScreen.routeName,
+                                              arguments: data.id);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ],
-                          );
-                        });
+                            );
+                          }),
+                    );
                   } else {
                     return Column(
                       children: const [
