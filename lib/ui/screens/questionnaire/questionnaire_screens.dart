@@ -229,20 +229,23 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       const SizedBox(
                         height: padding_12,
                       ),
-                      Column(children: [
-                        Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(radius_12),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height / 5,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(radius_12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Material(
+                            elevation: 2,
+                            borderRadius: BorderRadius.circular(radius_12),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 5,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(radius_12),
+                              ),
+                              child: showImage(),
                             ),
-                            child: showImage(),
                           ),
-                        ),
-                      ]),
+                        ],
+                      ),
                       SizedBox(
                         height: padding_16,
                       ),

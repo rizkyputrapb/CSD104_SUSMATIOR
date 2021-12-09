@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
+import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/detail_list/widgets/image_dialog_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 
@@ -164,35 +165,44 @@ class _DetailListScreenState extends State<DetailListScreen> {
                       const SizedBox(
                         height: padding_8,
                       ),
-                      GridView.count(
-                        shrinkWrap: true,
-                        crossAxisCount: 3,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await showDialog(
-                                  context: context,
-                                  builder: (_) => ImageDialog(
-                                    assetName: data['image'],
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(radius_12),
+                            child: Material(
+                              elevation: 2,
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height / 5,
+                                width: MediaQuery.of(context).size.width,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (_) => ImageDialog(
+                                        assetName: data['image'],
+                                      ),
+                                    );
+                                  },
+                                  child: Hero(
+                                    tag: data['image'],
+                                    child: CachedNetworkImage(
+                                      imageUrl: data['image'],
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      errorWidget: (context, url, error) {
+                                        print(error);
+                                        return const Icon(Icons.error);
+                                      },
+                                      placeholder: (context, url) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                );
-                              },
-                              child: Hero(
-                                tag: data['image'],
-                                child: CachedNetworkImage(
-                                  imageUrl: data['image'],
-                                  fit: BoxFit.cover,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.height,
-                                  errorWidget: (context, url, error) {
-                                    print(error);
-                                    return const Icon(Icons.error);
-                                  },
-                                  placeholder: (context, url) {
-                                    return const Center(child: CircularProgressIndicator(),);
-                                  },
                                 ),
                               ),
                             ),
