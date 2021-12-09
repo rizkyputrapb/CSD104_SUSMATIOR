@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/questionnaire_screens.dart';
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        onChanged: (value) {
+                        onFieldSubmitted: (value) {
                           setState(
                             () {
                               searchKeyword.text = value;
@@ -114,26 +115,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (_, index) {
-                          DocumentSnapshot data = snapshot.data!.docs[index];
-                          return Column(
-                            children: [
-                              CardListScam(
-                                title: data['pnumber'],
-                                description: data['description'],
-                                status: data['status'],
-                                onTap: () {
-                                  print("id = ${data.id}");
-                                  Navigator.pushNamed(
-                                      context, DetailListScreen.routeName,
-                                      arguments: data.id);
-                                },
+                    return AnimationLimiter(
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (_, index) {
+                            DocumentSnapshot data = snapshot.data!.docs[index];
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: Column(
+                                    children: [
+                                      CardListScam(
+                                        title: data['pnumber'],
+                                        description: data['description'],
+                                        status: data['status'],
+                                        onTap: () {
+                                          print("id = ${data.id}");
+                                          Navigator.pushNamed(context,
+                                              DetailListScreen.routeName,
+                                              arguments: data.id);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ],
-                          );
-                        });
+                            );
+                          }),
+                    );
                   } else {
                     return Column(
                       children: const [
