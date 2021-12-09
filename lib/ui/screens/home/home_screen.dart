@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String searchKeyword = "";
+  TextEditingController searchKeyword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Flexible(
                       child: TextFormField(
+                        controller: searchKeyword,
                         cursorColor: Colors.white,
                         maxLines: 1,
                         keyboardType: TextInputType.number,
@@ -61,9 +62,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         onChanged: (value) {
-                          setState(() {
-                            searchKeyword = value;
-                          });
+                          setState(
+                            () {
+                              searchKeyword.text = value;
+                              searchKeyword.selection =
+                                  TextSelection.fromPosition(
+                                TextPosition(
+                                  offset: searchKeyword.text.length,
+                                ),
+                              );
+                            },
+                          );
                         },
                       ),
                     ),
@@ -94,20 +103,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               // Change this listview to listview.builder if using firebase
-              child: StreamBuilder<dynamic>(
-                stream: (searchKeyword != "" && searchKeyword.isNotEmpty)
+              child: StreamBuilder<QuerySnapshot<dynamic>>(
+                stream: (searchKeyword.text != "" &&
+                        searchKeyword.text.isNotEmpty)
                     ? dataScam
-                        .where('search-key', arrayContains: searchKeyword)
+                        .where('search-key', arrayContains: searchKeyword.text)
                         .snapshots()
-                    : dataScam.snapshots(),
+                    : dataScam.limit(10).snapshots(),
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasData) {
                     return ListView.builder(
-                        itemCount: snapshot.data.docs.length,
+                        itemCount: snapshot.data!.docs.length,
                         itemBuilder: (_, index) {
-                          DocumentSnapshot data = snapshot.data.docs[index];
+                          DocumentSnapshot data = snapshot.data!.docs[index];
                           return Column(
                             children: [
                               CardListScam(

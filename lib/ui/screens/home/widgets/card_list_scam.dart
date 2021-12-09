@@ -66,7 +66,7 @@ class CardListScam extends StatelessWidget {
                       Text(
                         description,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        maxLines: 1,
                         style: GoogleFonts.montserrat(
                           fontSize: 14.0,
                           color: Color(0xFFAAAAAA),
