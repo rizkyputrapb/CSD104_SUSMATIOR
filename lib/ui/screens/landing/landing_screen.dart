@@ -18,21 +18,6 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> {
   @override
-  void initState() {
-    FirebaseAuth.instance
-        .authStateChanges()
-        .listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        Navigator.pushReplacementNamed(
-            context,
-            MainScreen.routeName);
-      }
-    });
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
