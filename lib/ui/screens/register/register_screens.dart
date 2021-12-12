@@ -173,6 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             'firstname':
                                                 firstNameController.text,
                                             'lastname': lastNameController.text,
+                                            'profile-picture': "",
                                           });
                                           switch (status) {
                                             case AuthResultStatus.successful:

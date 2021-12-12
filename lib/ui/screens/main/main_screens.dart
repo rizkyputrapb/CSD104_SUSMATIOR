@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  void getUser() async {
+  void getUser() {
     currentUser = FirebaseAuth.instance.currentUser;
   }
 

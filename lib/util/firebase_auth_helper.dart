@@ -27,7 +27,7 @@ class FirebaseAuthHelper {
   Future<AuthResultStatus> login({email, pass}) async {
     try {
       final authResult =
-      await _auth.signInWithEmailAndPassword(email: email, password: pass);
+          await _auth.signInWithEmailAndPassword(email: email, password: pass);
 
       if (authResult.user != null) {
         _status = AuthResultStatus.successful;
@@ -41,7 +41,7 @@ class FirebaseAuthHelper {
     return _status;
   }
 
-  logout() {
-    _auth.signOut();
+  logout() async {
+    await _auth.signOut();
   }
 }
