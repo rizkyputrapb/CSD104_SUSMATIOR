@@ -65,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SafeArea(
         child: (() {
-          if(_error) {
+          if (_error) {
             return const SnackBar(content: Text("Error initializing firebase"));
           }
           return Center(

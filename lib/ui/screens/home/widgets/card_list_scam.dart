@@ -36,10 +36,11 @@ class CardListScam extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CircleAvatar(
+                    foregroundColor: Colors.transparent,
                     radius: 27,
                     child: ClipOval(
                       child: Image.asset(
-                        'assets/icons/ic_user_scam.png',
+                        'assets/icons/ic_call.png',
                       ),
                     ),
                   ),
