@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:susmatior_app/provider/login_provider.dart';
 import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
@@ -13,7 +15,14 @@ import 'package:susmatior_app/ui/screens/splash/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => LoginProvider(),
+      )
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

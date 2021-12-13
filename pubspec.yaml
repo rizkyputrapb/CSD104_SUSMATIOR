@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^2.1.0
   salomon_bottom_bar: ^3.1.0
   cached_network_image: ^3.2.0
+  provider: ^6.0.1
 
   #Firebase dependencies.
   firebase_core: ^1.10.0
