@@ -157,7 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                               context, MainScreen.routeName);
                                         } else if (provider.state ==
                                             AuthResultStatus.wrongPassword) {
-                                          print("wrong pass");
                                           Fluttertoast.showToast(
                                               msg:
                                                   "Please insert the correct password!",
@@ -170,7 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                               fontSize: 16.0);
                                         } else if (provider.state ==
                                             AuthResultStatus.userNotFound) {
-                                          print("user not found");
                                           Fluttertoast.showToast(
                                               msg:
                                                   "User is not registered yet!",

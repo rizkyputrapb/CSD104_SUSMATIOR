@@ -7,10 +7,12 @@ class TextFormFieldBlue extends StatelessWidget {
     required this.label,
     required this.isObscure,
     required this.controller,
+    this.validator
   }) : super(key: key);
   String label;
   bool isObscure;
   TextEditingController controller;
+  String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,8 @@ class TextFormFieldBlue extends StatelessWidget {
       style: GoogleFonts.montserrat(color: Color(0xFF2F2E41)),
       obscureText: isObscure,
       cursorColor: Color(0xFF2F2E41),
+      validator: validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
       decoration: InputDecoration(
         labelText: label,

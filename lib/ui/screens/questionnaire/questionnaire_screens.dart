@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
@@ -12,10 +13,10 @@ import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_expande
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
-import 'package:path/path.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   static const routeName = '/questionnaire_screen';
+
   const QuestionnaireScreen({Key? key}) : super(key: key);
 
   @override
@@ -144,6 +145,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         label: 'Phone Number',
                         isObscure: false,
                         controller: phoneNumberController,
+                        validator: (text) => text!.isNotEmpty || text != "" ? text.length > 9 && text.length < 15 ? null : "Please input a valid phone number" : "This form should not be empty",
                       ),
                       const SizedBox(
                         height: padding_16,

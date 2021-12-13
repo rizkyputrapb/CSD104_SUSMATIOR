@@ -4,10 +4,7 @@ import 'package:susmatior_app/constants/authstatus_enum.dart';
 import 'package:susmatior_app/util/firebase_auth_helper.dart';
 
 class LoginProvider extends ChangeNotifier {
-  var _isLoginLoading = false;
   AuthResultStatus? _state;
-
-  bool get isLoginLoading => _isLoginLoading;
 
   AuthResultStatus? get state => _state;
 
@@ -23,7 +20,6 @@ class LoginProvider extends ChangeNotifier {
             notifyListeners();
             break;
           case AuthResultStatus.wrongPassword:
-            print("wrong pass");
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Wrong Password"),
@@ -33,7 +29,6 @@ class LoginProvider extends ChangeNotifier {
             notifyListeners();
             break;
           case AuthResultStatus.userNotFound:
-            print("user not found");
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("User Not Found"),
