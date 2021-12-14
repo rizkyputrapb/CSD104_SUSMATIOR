@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TextFormFieldBlue extends StatelessWidget {
-  TextFormFieldBlue({
-    Key? key,
-    required this.label,
-    required this.isObscure,
-    required this.controller,
-    this.validator
-  }) : super(key: key);
+  TextFormFieldBlue(
+      {Key? key,
+      required this.label,
+      required this.isObscure,
+      required this.controller,
+      this.validator})
+      : super(key: key);
   String label;
   bool isObscure;
   TextEditingController controller;

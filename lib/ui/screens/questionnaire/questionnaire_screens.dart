@@ -29,14 +29,14 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   Future<XFile?>? imageFile;
   List<Object> images = <Object>[];
 
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference dataScam = firestore.collection('data-scams');
     var provider = Provider.of<QuestionnaireProvider>(context, listen: true);
-
-    TextEditingController phoneNumberController = TextEditingController();
-    TextEditingController descriptionController = TextEditingController();
 
     Future<XFile?> _imgFromGallery() async {
       setState(() {
@@ -183,7 +183,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Consumer<QuestionnaireProvider>(builder: (context, provider, _){
+                      Consumer<QuestionnaireProvider>(
+                          builder: (context, provider, _) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -199,7 +200,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                     },
                                     activeColor: const Color(0xFF428DFF),
                                     fillColor: MaterialStateColor.resolveWith(
-                                          (states) => const Color(0xFF428DFF),
+                                      (states) => const Color(0xFF428DFF),
                                     ),
                                   ),
                                 ),
@@ -221,7 +222,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                     },
                                     activeColor: const Color(0xFF428DFF),
                                     fillColor: MaterialStateColor.resolveWith(
-                                          (states) => const Color(0xFF428DFF),
+                                      (states) => const Color(0xFF428DFF),
                                     ),
                                   ),
                                 ),
