@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:susmatior_app/constants/authstatus_enum.dart';
 import 'package:susmatior_app/util/firebase_auth_helper.dart';
@@ -32,7 +31,6 @@ class LoginProvider extends ChangeNotifier {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("User Not Found"),
-
               ),
             );
             _state = AuthResultStatus.userNotFound;

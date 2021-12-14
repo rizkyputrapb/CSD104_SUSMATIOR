@@ -14,16 +14,11 @@ import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questio
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
 
-class QuestionnaireScreen extends StatefulWidget {
+class QuestionnaireScreen extends StatelessWidget {
   static const routeName = '/questionnaire_screen';
 
-  const QuestionnaireScreen({Key? key}) : super(key: key);
+  QuestionnaireScreen({Key? key}) : super(key: key);
 
-  @override
-  State<QuestionnaireScreen> createState() => _QuestionnaireScreenState();
-}
-
-class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
@@ -239,7 +234,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       const SizedBox(
                         height: padding_16,
                       ),
-                      InkWell(
+                      ButtonRectangleExpanded(
+                        textButton: 'Submit Report',
                         onTap: () async {
                           String imagePath = await provider
                               .uploadImages(provider.imageFile.toString());
@@ -256,9 +252,6 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           Navigator.pushReplacementNamed(
                               context, MainScreen.routeName);
                         },
-                        child: ButtonRectangleExpanded(
-                          textButton: 'Submit Report',
-                        ),
                       ),
                     ],
                   ),

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:susmatior_app/provider/account_provider.dart';
 import 'package:susmatior_app/provider/login_provider.dart';
 import 'package:susmatior_app/provider/questionnaire_provider.dart';
 import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
@@ -24,6 +25,9 @@ void main() async {
       ChangeNotifierProvider(
         create: (context) => QuestionnaireProvider(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => AccountProvider(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -44,7 +48,7 @@ class MyApp extends StatelessWidget {
         MainScreen.routeName: (context) => const MainScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
         SettingScreen.routeName: (context) => const SettingScreen(),
-        QuestionnaireScreen.routeName: (context) => const QuestionnaireScreen(),
+        QuestionnaireScreen.routeName: (context) => QuestionnaireScreen(),
         DetailListScreen.routeName: (context) => DetailListScreen(
               docId: ModalRoute.of(context)?.settings.arguments as String?,
             ),
