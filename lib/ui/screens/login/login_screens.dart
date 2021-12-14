@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () async {
+                                      onPressed: ()  {
                                         if (isValidated != true ||
                                             passwordController.text.isEmpty) {
                                           Fluttertoast.showToast(

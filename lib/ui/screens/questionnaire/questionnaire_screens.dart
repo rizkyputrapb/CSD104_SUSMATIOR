@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
+import 'package:susmatior_app/provider/questionnaire_provider.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_expanded_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questionnaire_widget.dart';
@@ -24,7 +26,6 @@ class QuestionnaireScreen extends StatefulWidget {
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
-  String _radioSelected = '';
   Future<XFile?>? imageFile;
   List<Object> images = <Object>[];
 
@@ -32,6 +33,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference dataScam = firestore.collection('data-scams');
+    var provider = Provider.of<QuestionnaireProvider>(context, listen: true);
 
     TextEditingController phoneNumberController = TextEditingController();
     TextEditingController descriptionController = TextEditingController();
@@ -80,14 +82,14 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     right: 5,
                     top: 5,
                     child: InkWell(
-                      child: Icon(
+                      child: const Icon(
                         Icons.change_circle,
                         size: 30,
                         color: Colors.white,
                       ),
                       onTap: () async {
-                        XFile? file = await _imgFromGallery();
-                        await uploadImage(file!);
+                        XFile? file = await provider.imgFromGallery();
+                        await provider.uploadImage(file!);
                       },
                     ),
                   )
@@ -142,11 +144,20 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormFieldBlue(
-                        label: 'Phone Number',
-                        isObscure: false,
-                        controller: phoneNumberController,
-                        validator: (text) => text!.isNotEmpty || text != "" ? text.length > 9 && text.length < 15 ? null : "Please input a valid phone number" : "This form should not be empty",
-                      ),
+                          label: 'Phone Number',
+                          isObscure: false,
+                          controller: phoneNumberController,
+                          validator: (text) {
+                            if (text!.isNotEmpty || text != "") {
+                              if (text.length > 9 && text.length < 15) {
+                                return null;
+                              } else {
+                                return "Please input a valid phone number";
+                              }
+                            } else {
+                              return "This form should not be empty";
+                            }
+                          }),
                       const SizedBox(
                         height: padding_16,
                       ),
@@ -154,6 +165,13 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         label: 'Descriptions',
                         isObscure: false,
                         controller: descriptionController,
+                        validator: (value) {
+                          if (value!.isNotEmpty || value != "") {
+                            return null;
+                          } else {
+                            return "Please fill this field";
+                          }
+                        },
                       ),
                       const SizedBox(
                         height: padding_16,
@@ -165,59 +183,57 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
-                            children: [
-                              Transform.scale(
-                                scale: 1.3,
-                                child: Radio(
-                                  value: 'Scam',
-                                  groupValue: _radioSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _radioSelected = value as String;
-                                    });
-                                  },
-                                  activeColor: Color(0xFF428DFF),
-                                  fillColor: MaterialStateColor.resolveWith(
-                                    (states) => Color(0xFF428DFF),
+                      Consumer<QuestionnaireProvider>(builder: (context, provider, _){
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              children: [
+                                Transform.scale(
+                                  scale: 1.3,
+                                  child: Radio(
+                                    value: 'Scam',
+                                    groupValue: provider.radioSelected,
+                                    onChanged: (value) {
+                                      provider.selectedRadio(value as String);
+                                    },
+                                    activeColor: const Color(0xFF428DFF),
+                                    fillColor: MaterialStateColor.resolveWith(
+                                          (states) => const Color(0xFF428DFF),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                'Scam',
-                                style: GoogleFonts.montserrat(),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Transform.scale(
-                                scale: 1.3,
-                                child: Radio(
-                                  value: 'Not Scam',
-                                  groupValue: _radioSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _radioSelected = value as String;
-                                    });
-                                  },
-                                  activeColor: const Color(0xFF428DFF),
-                                  fillColor: MaterialStateColor.resolveWith(
-                                    (states) => const Color(0xFF428DFF),
+                                Text(
+                                  'Scam',
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Transform.scale(
+                                  scale: 1.3,
+                                  child: Radio(
+                                    value: 'Not Scam',
+                                    groupValue: provider.radioSelected,
+                                    onChanged: (value) {
+                                      provider.selectedRadio(value as String);
+                                    },
+                                    activeColor: const Color(0xFF428DFF),
+                                    fillColor: MaterialStateColor.resolveWith(
+                                          (states) => const Color(0xFF428DFF),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                'Not Scam',
-                                style: GoogleFonts.montserrat(),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                Text(
+                                  'Not Scam',
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                       const SizedBox(
                         height: padding_16,
                       ),
@@ -248,7 +264,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       InkWell(
@@ -259,7 +275,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           dataScam.add({
                             'pnumber': phoneNumberController.text,
                             'description': descriptionController.text,
-                            'status': _radioSelected,
+                            'status': provider.radioSelected,
                             'image': imagePath,
                             'search-key':
                                 setSearchKey(phoneNumberController.text),

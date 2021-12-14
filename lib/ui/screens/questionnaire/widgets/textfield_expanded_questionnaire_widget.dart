@@ -22,6 +22,7 @@ class TextFormFieldExpandedBlue extends StatelessWidget {
       obscureText: isObscure,
       cursorColor: Color(0xFF2F2E41),
       keyboardType: TextInputType.multiline,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
       maxLines: null,
       controller: controller,
