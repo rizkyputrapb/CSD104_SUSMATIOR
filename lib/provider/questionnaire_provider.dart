@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-class QuestionnaireProvider extends ChangeNotifier{
+class QuestionnaireProvider extends ChangeNotifier {
   String _radioSelected = '';
   Future<XFile?>? imageFile;
   List<Object> images = <Object>[];

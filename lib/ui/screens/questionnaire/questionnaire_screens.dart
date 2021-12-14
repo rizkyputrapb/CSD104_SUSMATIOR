@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
@@ -26,9 +24,6 @@ class QuestionnaireScreen extends StatefulWidget {
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
-  Future<XFile?>? imageFile;
-  List<Object> images = <Object>[];
-
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
@@ -38,33 +33,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     CollectionReference dataScam = firestore.collection('data-scams');
     var provider = Provider.of<QuestionnaireProvider>(context, listen: true);
 
-    Future<XFile?> _imgFromGallery() async {
-      setState(() {
-        imageFile = ImagePicker().pickImage(source: ImageSource.gallery);
-      });
-      return await imageFile;
-    }
-
-    Future<String> uploadImage(XFile imageFile) async {
-      String filename = basename(imageFile.path);
-      return filename;
-    }
-
-    Future<String> uploadImages(String path) async {
-      XFile? imagePath = await imageFile;
-      String filename = basename(imagePath!.path);
-      Future<String> img = uploadImage(XFile(filename.toString()));
-      Reference ref = FirebaseStorage.instance.ref().child(await img);
-      UploadTask task = ref.putFile(File(imagePath.path));
-      TaskSnapshot snapshot = await task;
-      String url = await snapshot.ref.getDownloadURL();
-      print(url);
-      return url;
-    }
-
     Widget showImage() {
       return FutureBuilder<XFile?>(
-        future: imageFile,
+        future: provider.imageFile,
         builder: (BuildContext context, AsyncSnapshot<XFile?> snapshot) {
           if (snapshot.data != null) {
             return ClipRRect(
@@ -105,8 +76,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
             return IconButton(
               icon: const Icon(Icons.add),
               onPressed: () async {
-                XFile? file = await _imgFromGallery();
-                await uploadImage(file!);
+                XFile? file = await provider.imgFromGallery();
+                await provider.uploadImage(file!);
               },
             );
           }
@@ -270,8 +241,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       ),
                       InkWell(
                         onTap: () async {
-                          String imagePath =
-                              await uploadImages(imageFile.toString());
+                          String imagePath = await provider
+                              .uploadImages(provider.imageFile.toString());
 
                           dataScam.add({
                             'pnumber': phoneNumberController.text,
