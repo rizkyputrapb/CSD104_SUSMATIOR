@@ -10,7 +10,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="susmatior_app">
+        android:label="SUSMATIOR">
         <activity
             android:name=".MainActivity"
             android:exported="true"

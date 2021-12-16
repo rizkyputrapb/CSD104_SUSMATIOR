@@ -1,9 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:susmatior_app/util/notification_description_text.dart';
+import 'package:susmatior_app/constants/string_array_notification_body_constants.dart';
 
 final selectNotificationSubject = BehaviorSubject<String>();
 
@@ -19,7 +19,7 @@ class NotificationHelper {
   Future<void> initNotifications(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        const AndroidInitializationSettings('app_icon');
 
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
@@ -27,7 +27,9 @@ class NotificationHelper {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String? payload) async {
       if (payload != null) {
-        print('notification payload: ' + payload);
+        if (kDebugMode) {
+          print('notification payload: ' + payload);
+        }
       }
       selectNotificationSubject.add(payload ?? 'empty payload');
     });
@@ -39,17 +41,6 @@ class NotificationHelper {
     var _channelName = "Daily Reminder";
     var _channelDescription = "SUSMATIOR";
 
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        _channelId, _channelName,
-        channelDescription: _channelDescription,
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker',
-        styleInformation: const DefaultStyleInformation(true, true));
-
-    var platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
     var titleNotification =
         "<b>Check information scam if you discovered suspicious</b>";
     var text = descriptionNotification;
@@ -58,7 +49,25 @@ class NotificationHelper {
         generateRandomDescription(0, descriptionNotification.length - 1);
     var randomDescription = text[randomIndex];
     var descriptionName = randomDescription;
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      _channelId,
+      _channelName,
+      channelDescription: _channelDescription,
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      styleInformation: BigTextStyleInformation(
+        descriptionName,
+        contentTitle: titleNotification,
+        htmlFormatTitle: true,
+        htmlFormatContentTitle: true,
+        htmlFormatBigText: true,
+      ),
+    );
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
+    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     await flutterLocalNotificationsPlugin.show(
       randomIndex,
       titleNotification,

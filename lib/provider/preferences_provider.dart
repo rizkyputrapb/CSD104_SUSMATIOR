@@ -33,14 +33,14 @@ class PreferencesProvider extends ChangeNotifier {
 
       Fluttertoast.showToast(
         msg: 'Reminder\'s daily enabled!',
-        backgroundColor: Colors.amber[900],
+        backgroundColor: Colors.grey.withOpacity(0.75),
         textColor: Colors.white,
       );
     } else {
       await AndroidAlarmManager.cancel(alarmId);
       Fluttertoast.showToast(
         msg: 'Reminder\'s daily disabled!',
-        backgroundColor: Colors.amber[900],
+        backgroundColor: Colors.grey.withOpacity(0.75),
         textColor: Colors.white,
       );
     }
