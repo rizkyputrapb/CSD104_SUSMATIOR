@@ -32,7 +32,7 @@ class PreferencesProvider extends ChangeNotifier {
       );
 
       Fluttertoast.showToast(
-        msg: 'Reminder\'s daily enabled!',
+        msg: "Daily reminder is enabled!",
         backgroundColor: Colors.grey.withOpacity(0.75),
         textColor: Colors.white,
       );

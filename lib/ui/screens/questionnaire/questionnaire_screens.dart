@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -14,84 +15,105 @@ import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questio
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
 
-class QuestionnaireScreen extends StatelessWidget {
+class QuestionnaireScreen extends StatefulWidget {
   static const routeName = '/questionnaire_screen';
 
   QuestionnaireScreen({Key? key}) : super(key: key);
 
+  @override
+  State<QuestionnaireScreen> createState() => _QuestionnaireScreenState();
+}
+
+class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
+  late CollectionReference dataScam;
+  late FirebaseFirestore firestore;
+  late QuestionnaireProvider provider;
+
+  @override
+  void initState() {
+    firestore = FirebaseFirestore.instance;
+    dataScam = firestore.collection('data-scams');
+    super.initState();
+  }
+
+  Widget showImage() {
+    return FutureBuilder<XFile?>(
+      future: provider.imageFile,
+      builder: (BuildContext context, AsyncSnapshot<XFile?> snapshot) {
+        if (snapshot.data != null) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(4.0),
+            child: Stack(
+              children: [
+                Image.file(
+                  File(
+                    snapshot.data!.path,
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  right: 5,
+                  top: 5,
+                  child: InkWell(
+                    child: const Icon(
+                      Icons.change_circle,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                    onTap: () async {
+                      XFile? file = await provider.imgFromGallery();
+                      await provider.uploadImage(file!);
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        } else if (snapshot.error != null) {
+          return const Text(
+            'Error Picking Image',
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () async {
+              XFile? file = await provider.imgFromGallery();
+              await provider.uploadImage(file!);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  setSearchKey(String phoneNumber) {
+    List<String> searchValueList = [];
+    String temp = "";
+    for (int i = 0; i < phoneNumber.length; i++) {
+      temp = temp + phoneNumber[i];
+      searchValueList.add(temp);
+    }
+    return searchValueList;
+  }
+
+  @override
+  void deactivate() {
+    descriptionController.clear();
+    phoneNumberController.clear();
+    provider.clear();
+    Provider.of<QuestionnaireProvider>(context, listen: false);
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference dataScam = firestore.collection('data-scams');
-    var provider = Provider.of<QuestionnaireProvider>(context, listen: true);
-
-    Widget showImage() {
-      return FutureBuilder<XFile?>(
-        future: provider.imageFile,
-        builder: (BuildContext context, AsyncSnapshot<XFile?> snapshot) {
-          if (snapshot.data != null) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(4.0),
-              child: Stack(
-                children: [
-                  Image.file(
-                    File(
-                      snapshot.data!.path,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    right: 5,
-                    top: 5,
-                    child: InkWell(
-                      child: const Icon(
-                        Icons.change_circle,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                      onTap: () async {
-                        XFile? file = await provider.imgFromGallery();
-                        await provider.uploadImage(file!);
-                      },
-                    ),
-                  )
-                ],
-              ),
-            );
-          } else if (snapshot.error != null) {
-            return const Text(
-              'Error Picking Image',
-              textAlign: TextAlign.center,
-            );
-          } else {
-            return IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () async {
-                XFile? file = await provider.imgFromGallery();
-                await provider.uploadImage(file!);
-              },
-            );
-          }
-        },
-      );
-    }
-
-    setSearchKey(String phoneNumber) {
-      List<String> searchValueList = [];
-      String temp = "";
-      for (int i = 0; i < phoneNumber.length; i++) {
-        temp = temp + phoneNumber[i];
-        searchValueList.add(temp);
-      }
-      return searchValueList;
-    }
-
+    provider = Provider.of<QuestionnaireProvider>(context, listen: true);
     return Scaffold(
-      appBar: AppBarPrimary(
+      appBar: const AppBarPrimary(
         textTitle: 'Report Case',
       ),
       body: SafeArea(
@@ -116,11 +138,14 @@ class QuestionnaireScreen extends StatelessWidget {
                           validator: (text) {
                             if (text!.isNotEmpty || text != "") {
                               if (text.length > 9 && text.length < 15) {
+                                provider.validatePNumber(true);
                                 return null;
                               } else {
+                                provider.validatePNumber(false);
                                 return "Please input a valid phone number";
                               }
                             } else {
+                              provider.validatePNumber(false);
                               return "This form should not be empty";
                             }
                           }),
@@ -133,8 +158,10 @@ class QuestionnaireScreen extends StatelessWidget {
                         controller: descriptionController,
                         validator: (value) {
                           if (value!.isNotEmpty || value != "") {
+                            provider.validateDesc(true);
                             return null;
                           } else {
+                            provider.validateDesc(false);
                             return "Please fill this field";
                           }
                         },
@@ -237,20 +264,32 @@ class QuestionnaireScreen extends StatelessWidget {
                       ButtonRectangleExpanded(
                         textButton: 'Submit Report',
                         onTap: () async {
-                          String imagePath = await provider
-                              .uploadImages(provider.imageFile.toString());
+                          if (provider.isPNumberValidated == true &&
+                              provider.isDescValidated == true &&
+                              provider.isImageAdded == true &&
+                              provider.isScamRadioSelected == true) {
+                            print("all form filled!");
+                            String imagePath = await provider
+                                .uploadImages(provider.imageFile.toString());
 
-                          dataScam.add({
-                            'pnumber': phoneNumberController.text,
-                            'description': descriptionController.text,
-                            'status': provider.radioSelected,
-                            'image': imagePath,
-                            'search-key':
-                                setSearchKey(phoneNumberController.text),
-                          });
+                            dataScam.add({
+                              'pnumber': phoneNumberController.text,
+                              'description': descriptionController.text,
+                              'status': provider.radioSelected,
+                              'image': imagePath,
+                              'search-key':
+                                  setSearchKey(phoneNumberController.text),
+                            });
 
-                          Navigator.pushReplacementNamed(
-                              context, MainScreen.routeName);
+                            Navigator.pushReplacementNamed(
+                                context, MainScreen.routeName);
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Please fill all of the forms!",
+                              backgroundColor: Colors.grey.withOpacity(0.75),
+                              textColor: Colors.white,
+                            );
+                          }
                         },
                       ),
                     ],

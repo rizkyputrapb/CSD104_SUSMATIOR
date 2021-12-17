@@ -10,16 +10,47 @@ class QuestionnaireProvider extends ChangeNotifier {
   Future<XFile?>? imageFile;
   List<Object> images = <Object>[];
 
+  bool _isPNumberValidated = false;
+  bool _isDescValidated = false;
+  bool _isScamRadioSelected = false;
+  bool _isImageAdded = false;
+
   String get radioSelected => _radioSelected;
+  bool get isPNumberValidated => _isPNumberValidated;
+  bool get isDescValidated => _isDescValidated;
+  bool get isScamRadioSelected => _isScamRadioSelected;
+  bool get isImageAdded => _isImageAdded;
+
+  void validatePNumber(bool state) {
+    _isPNumberValidated = state;
+    notifyListeners();
+  }
+
+  void validateDesc(bool state) {
+    _isDescValidated = state;
+    notifyListeners();
+  }
 
   void selectedRadio(String selected) {
     _radioSelected = selected;
+    _isScamRadioSelected = true;
     notifyListeners();
     print("Selected radiobutton: $_radioSelected");
   }
 
+  void clear() {
+    _isImageAdded = false;
+    _isScamRadioSelected = false;
+    _isPNumberValidated = false;
+    _isDescValidated = false;
+    imageFile = null;
+    _radioSelected = "";
+    notifyListeners();
+  }
+
   Future<XFile?> imgFromGallery() async {
     imageFile = ImagePicker().pickImage(source: ImageSource.gallery);
+    _isImageAdded = true;
     notifyListeners();
     return await imageFile;
   }
@@ -37,7 +68,7 @@ class QuestionnaireProvider extends ChangeNotifier {
     UploadTask task = ref.putFile(File(imagePath.path));
     TaskSnapshot snapshot = await task;
     String url = await snapshot.ref.getDownloadURL();
-    print(url);
+    print("imgUrl: $url");
     return url;
   }
 }

@@ -33,8 +33,8 @@ Future<void> main() async {
   if (Platform.isAndroid) {
     await AndroidAlarmManager.initialize();
   }
-
   await _notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
+
   runApp(
     MultiProvider(
       providers: [
