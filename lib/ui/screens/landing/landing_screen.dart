@@ -74,7 +74,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 height: 56.0,
                                 child: MaterialButton(
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
+                                    Navigator.pushNamed(
                                         context, RegisterScreen.routeName);
                                   },
                                   color: blueSecondary,
@@ -104,7 +104,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 height: 56.0,
                                 child: MaterialButton(
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
+                                    Navigator.pushNamed(
                                         context, LoginScreen.routeName);
                                   },
                                   elevation: 0,
