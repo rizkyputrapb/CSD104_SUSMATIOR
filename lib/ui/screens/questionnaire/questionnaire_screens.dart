@@ -1,128 +1,120 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
+import 'package:susmatior_app/provider/questionnaire_provider.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_expanded_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
-import 'package:path/path.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   static const routeName = '/questionnaire_screen';
-  const QuestionnaireScreen({Key? key}) : super(key: key);
+
+  QuestionnaireScreen({Key? key}) : super(key: key);
 
   @override
   State<QuestionnaireScreen> createState() => _QuestionnaireScreenState();
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
-  String _radioSelected = '';
-  Future<XFile?>? imageFile;
-  List<Object> images = <Object>[];
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  late CollectionReference dataScam;
+  late FirebaseFirestore firestore;
+  late QuestionnaireProvider provider;
+
+  @override
+  void initState() {
+    firestore = FirebaseFirestore.instance;
+    dataScam = firestore.collection('data-scams');
+    super.initState();
+  }
+
+  Widget showImage() {
+    return FutureBuilder<XFile?>(
+      future: provider.imageFile,
+      builder: (BuildContext context, AsyncSnapshot<XFile?> snapshot) {
+        if (snapshot.data != null) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(4.0),
+            child: Stack(
+              children: [
+                Image.file(
+                  File(
+                    snapshot.data!.path,
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  right: 5,
+                  top: 5,
+                  child: InkWell(
+                    child: const Icon(
+                      Icons.change_circle,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                    onTap: () async {
+                      XFile? file = await provider.imgFromGallery();
+                      await provider.uploadImage(file!);
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        } else if (snapshot.error != null) {
+          return const Text(
+            'Error Picking Image',
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () async {
+              XFile? file = await provider.imgFromGallery();
+              await provider.uploadImage(file!);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  setSearchKey(String phoneNumber) {
+    List<String> searchValueList = [];
+    String temp = "";
+    for (int i = 0; i < phoneNumber.length; i++) {
+      temp = temp + phoneNumber[i];
+      searchValueList.add(temp);
+    }
+    return searchValueList;
+  }
+
+  @override
+  void deactivate() {
+    descriptionController.clear();
+    phoneNumberController.clear();
+    provider.clear();
+    Provider.of<QuestionnaireProvider>(context, listen: false);
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference dataScam = firestore.collection('data-scams');
-
-    TextEditingController phoneNumberController = TextEditingController();
-    TextEditingController descriptionController = TextEditingController();
-
-    Future<XFile?> _imgFromGallery() async {
-      setState(() {
-        imageFile = ImagePicker().pickImage(source: ImageSource.gallery);
-      });
-      return await imageFile;
-    }
-
-    Future<String> uploadImage(XFile imageFile) async {
-      String filename = basename(imageFile.path);
-      return filename;
-    }
-
-    Future<String> uploadImages(String path) async {
-      XFile? imagePath = await imageFile;
-      String filename = basename(imagePath!.path);
-      Future<String> img = uploadImage(XFile(filename.toString()));
-      Reference ref = FirebaseStorage.instance.ref().child(await img);
-      UploadTask task = ref.putFile(File(imagePath.path));
-      TaskSnapshot snapshot = await task;
-      String url = await snapshot.ref.getDownloadURL();
-      print(url);
-      return url;
-    }
-
-    Widget showImage() {
-      return FutureBuilder<XFile?>(
-        future: imageFile,
-        builder: (BuildContext context, AsyncSnapshot<XFile?> snapshot) {
-          if (snapshot.data != null) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(4.0),
-              child: Stack(
-                children: [
-                  Image.file(
-                    File(
-                      snapshot.data!.path,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    right: 5,
-                    top: 5,
-                    child: InkWell(
-                      child: Icon(
-                        Icons.change_circle,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                      onTap: () async {
-                        XFile? file = await _imgFromGallery();
-                        await uploadImage(file!);
-                      },
-                    ),
-                  )
-                ],
-              ),
-            );
-          } else if (snapshot.error != null) {
-            return const Text(
-              'Error Picking Image',
-              textAlign: TextAlign.center,
-            );
-          } else {
-            return IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () async {
-                XFile? file = await _imgFromGallery();
-                await uploadImage(file!);
-              },
-            );
-          }
-        },
-      );
-    }
-
-    setSearchKey(String phoneNumber) {
-      List<String> searchValueList = [];
-      String temp = "";
-      for (int i = 0; i < phoneNumber.length; i++) {
-        temp = temp + phoneNumber[i];
-        searchValueList.add(temp);
-      }
-      return searchValueList;
-    }
-
+    provider = Provider.of<QuestionnaireProvider>(context, listen: true);
     return Scaffold(
-      appBar: AppBarPrimary(
+      appBar: const AppBarPrimary(
         textTitle: 'Report Case',
       ),
       body: SafeArea(
@@ -141,10 +133,23 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormFieldBlue(
-                        label: 'Phone Number',
-                        isObscure: false,
-                        controller: phoneNumberController,
-                      ),
+                          label: 'Phone Number',
+                          isObscure: false,
+                          controller: phoneNumberController,
+                          validator: (text) {
+                            if (text!.isNotEmpty || text != "") {
+                              if (text.length > 9 && text.length < 15) {
+                                provider.validatePNumber(true);
+                                return null;
+                              } else {
+                                provider.validatePNumber(false);
+                                return "Please input a valid phone number";
+                              }
+                            } else {
+                              provider.validatePNumber(false);
+                              return "This form should not be empty";
+                            }
+                          }),
                       const SizedBox(
                         height: padding_16,
                       ),
@@ -152,6 +157,15 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         label: 'Descriptions',
                         isObscure: false,
                         controller: descriptionController,
+                        validator: (value) {
+                          if (value!.isNotEmpty || value != "") {
+                            provider.validateDesc(true);
+                            return null;
+                          } else {
+                            provider.validateDesc(false);
+                            return "Please fill this field";
+                          }
+                        },
                       ),
                       const SizedBox(
                         height: padding_16,
@@ -163,59 +177,58 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
-                            children: [
-                              Transform.scale(
-                                scale: 1.3,
-                                child: Radio(
-                                  value: 'Scam',
-                                  groupValue: _radioSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _radioSelected = value as String;
-                                    });
-                                  },
-                                  activeColor: Color(0xFF428DFF),
-                                  fillColor: MaterialStateColor.resolveWith(
-                                    (states) => Color(0xFF428DFF),
+                      Consumer<QuestionnaireProvider>(
+                          builder: (context, provider, _) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              children: [
+                                Transform.scale(
+                                  scale: 1.3,
+                                  child: Radio(
+                                    value: 'Scam',
+                                    groupValue: provider.radioSelected,
+                                    onChanged: (value) {
+                                      provider.selectedRadio(value as String);
+                                    },
+                                    activeColor: const Color(0xFF428DFF),
+                                    fillColor: MaterialStateColor.resolveWith(
+                                      (states) => const Color(0xFF428DFF),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                'Scam',
-                                style: GoogleFonts.montserrat(),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Transform.scale(
-                                scale: 1.3,
-                                child: Radio(
-                                  value: 'Not Scam',
-                                  groupValue: _radioSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _radioSelected = value as String;
-                                    });
-                                  },
-                                  activeColor: const Color(0xFF428DFF),
-                                  fillColor: MaterialStateColor.resolveWith(
-                                    (states) => const Color(0xFF428DFF),
+                                Text(
+                                  'Scam',
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Transform.scale(
+                                  scale: 1.3,
+                                  child: Radio(
+                                    value: 'Not Scam',
+                                    groupValue: provider.radioSelected,
+                                    onChanged: (value) {
+                                      provider.selectedRadio(value as String);
+                                    },
+                                    activeColor: const Color(0xFF428DFF),
+                                    fillColor: MaterialStateColor.resolveWith(
+                                      (states) => const Color(0xFF428DFF),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                'Not Scam',
-                                style: GoogleFonts.montserrat(),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                Text(
+                                  'Not Scam',
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                       const SizedBox(
                         height: padding_16,
                       ),
@@ -246,28 +259,69 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: padding_16,
                       ),
                       InkWell(
                         onTap: () async {
-                          String imagePath =
-                              await uploadImages(imageFile.toString());
+                          if (provider.isPNumberValidated == true &&
+                              provider.isDescValidated == true &&
+                              provider.isImageAdded == true &&
+                              provider.isScamRadioSelected == true) {
+                            print("all form filled!");
+                            provider.loadingState(true);
+                            try {
+                              String imagePath = await provider
+                                  .uploadImages(provider.imageFile.toString());
 
-                          dataScam.add({
-                            'pnumber': phoneNumberController.text,
-                            'description': descriptionController.text,
-                            'status': _radioSelected,
-                            'image': imagePath,
-                            'search-key':
+                              dataScam.add({
+                                'pnumber': phoneNumberController.text,
+                                'description': descriptionController.text,
+                                'status': provider.radioSelected,
+                                'image': imagePath,
+                                'search-key':
                                 setSearchKey(phoneNumberController.text),
-                          });
-
-                          Navigator.pushReplacementNamed(
-                              context, MainScreen.routeName);
+                              }).whenComplete(() {
+                                provider.loadingState(false);
+                                Navigator.pushReplacementNamed(
+                                    context, MainScreen.routeName);
+                              });
+                            } catch (e) {
+                              print("error: $e");
+                            }
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Please fill all of the forms!",
+                              backgroundColor: Colors.grey.withOpacity(0.75),
+                              textColor: Colors.white,
+                            );
+                          }
                         },
-                        child: ButtonRectangleExpanded(
-                          textButton: 'Submit Report',
+                        child: Ink(
+                          height: MediaQuery.of(context).size.height / 10,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(padding_16),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF428DFF),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(8.0),
+                              right: Radius.circular(8.0),
+                            ),
+                          ),
+                          child: Center(
+                            child: provider.isLoading == true ? const CircularProgressIndicator(
+                              color: blueTertiary,
+                            ) : Text(
+                              "Submit Report",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],

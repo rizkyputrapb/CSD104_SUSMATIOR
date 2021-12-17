@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppBarPrimary extends StatelessWidget implements PreferredSizeWidget {
-  AppBarPrimary({
+  const AppBarPrimary({
     Key? key,
     required this.textTitle,
   }) : super(key: key);
-  String textTitle;
+  final String textTitle;
   @override
   Widget build(BuildContext context) {
     return AppBar(

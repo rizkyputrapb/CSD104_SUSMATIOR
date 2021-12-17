@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:susmatior_app/provider/preferences_provider.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -9,7 +11,7 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarPrimary(
+      appBar: const AppBarPrimary(
         textTitle: 'Settings',
       ),
       body: Container(
@@ -35,13 +37,19 @@ class SettingScreen extends StatelessWidget {
                     style: GoogleFonts.montserrat(fontSize: 16.0),
                   ),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: Switch.adaptive(
-                    value: false,
-                    activeColor: Color(0xFF428DFF),
-                    onChanged: (newValue) {},
-                  ),
+                Consumer<PreferencesProvider>(
+                  builder: (context, provider, _) {
+                    return Flexible(
+                      flex: 1,
+                      child: Switch.adaptive(
+                        value: provider.isDailyReminderActive,
+                        activeColor: const Color(0xFF428DFF),
+                        onChanged: (newValue) {
+                          provider.setDailyReminderActive(newValue);
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

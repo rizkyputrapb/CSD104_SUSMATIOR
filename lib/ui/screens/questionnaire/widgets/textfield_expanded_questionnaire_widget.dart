@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TextFormFieldExpandedBlue extends StatelessWidget {
-  TextFormFieldExpandedBlue({
+  const TextFormFieldExpandedBlue({
     Key? key,
     required this.label,
     required this.isObscure,
     required this.controller,
+    this.validator
   }) : super(key: key);
 
-  String label;
-  bool isObscure;
-  TextEditingController controller;
+  final String label;
+  final bool isObscure;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,8 @@ class TextFormFieldExpandedBlue extends StatelessWidget {
       obscureText: isObscure,
       cursorColor: Color(0xFF2F2E41),
       keyboardType: TextInputType.multiline,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: validator,
       maxLines: null,
       controller: controller,
       decoration: InputDecoration(

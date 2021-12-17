@@ -7,6 +7,7 @@ enum AuthResultStatus {
   userNotFound,
   operationNotAllowed,
   undefined,
+  error
 }
 
 class AuthExceptionHandler {

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CardAccount extends StatelessWidget {
-  CardAccount({
+  const CardAccount({
     Key? key,
     required this.titleText,
     required this.childText,
   }) : super(key: key);
 
-  String titleText;
-  String childText;
+  final String titleText;
+  final String childText;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class CardAccount extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Expanded(
               flex: 4,
