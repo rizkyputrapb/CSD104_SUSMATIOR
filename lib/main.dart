@@ -10,6 +10,7 @@ import 'package:susmatior_app/provider/account_provider.dart';
 import 'package:susmatior_app/provider/login_provider.dart';
 import 'package:susmatior_app/provider/preferences_provider.dart';
 import 'package:susmatior_app/provider/questionnaire_provider.dart';
+import 'package:susmatior_app/provider/register_provider.dart';
 import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
@@ -53,6 +54,9 @@ Future<void> main() async {
               sharedPreferences: SharedPreferences.getInstance(),
             ),
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RegisterProvider(),
         )
       ],
       child: const MyApp(),
