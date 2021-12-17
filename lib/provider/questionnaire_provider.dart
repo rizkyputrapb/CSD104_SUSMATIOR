@@ -14,12 +14,19 @@ class QuestionnaireProvider extends ChangeNotifier {
   bool _isDescValidated = false;
   bool _isScamRadioSelected = false;
   bool _isImageAdded = false;
+  bool _isLoading = false;
 
   String get radioSelected => _radioSelected;
   bool get isPNumberValidated => _isPNumberValidated;
   bool get isDescValidated => _isDescValidated;
   bool get isScamRadioSelected => _isScamRadioSelected;
   bool get isImageAdded => _isImageAdded;
+  bool get isLoading => _isLoading;
+
+  void loadingState(bool state) {
+    _isLoading = state;
+    notifyListeners();
+  }
 
   void validatePNumber(bool state) {
     _isPNumberValidated = state;
@@ -43,6 +50,7 @@ class QuestionnaireProvider extends ChangeNotifier {
     _isScamRadioSelected = false;
     _isPNumberValidated = false;
     _isDescValidated = false;
+    _isLoading = false;
     imageFile = null;
     _radioSelected = "";
     notifyListeners();

@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/provider/questionnaire_provider.dart';
@@ -261,28 +262,33 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       const SizedBox(
                         height: padding_16,
                       ),
-                      ButtonRectangleExpanded(
-                        textButton: 'Submit Report',
+                      InkWell(
                         onTap: () async {
                           if (provider.isPNumberValidated == true &&
                               provider.isDescValidated == true &&
                               provider.isImageAdded == true &&
                               provider.isScamRadioSelected == true) {
                             print("all form filled!");
-                            String imagePath = await provider
-                                .uploadImages(provider.imageFile.toString());
+                            provider.loadingState(true);
+                            try {
+                              String imagePath = await provider
+                                  .uploadImages(provider.imageFile.toString());
 
-                            dataScam.add({
-                              'pnumber': phoneNumberController.text,
-                              'description': descriptionController.text,
-                              'status': provider.radioSelected,
-                              'image': imagePath,
-                              'search-key':
-                                  setSearchKey(phoneNumberController.text),
-                            });
-
-                            Navigator.pushReplacementNamed(
-                                context, MainScreen.routeName);
+                              dataScam.add({
+                                'pnumber': phoneNumberController.text,
+                                'description': descriptionController.text,
+                                'status': provider.radioSelected,
+                                'image': imagePath,
+                                'search-key':
+                                setSearchKey(phoneNumberController.text),
+                              }).whenComplete(() {
+                                provider.loadingState(false);
+                                Navigator.pushReplacementNamed(
+                                    context, MainScreen.routeName);
+                              });
+                            } catch (e) {
+                              print("error: $e");
+                            }
                           } else {
                             Fluttertoast.showToast(
                               msg: "Please fill all of the forms!",
@@ -291,6 +297,32 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                             );
                           }
                         },
+                        child: Ink(
+                          height: MediaQuery.of(context).size.height / 10,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(padding_16),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF428DFF),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(8.0),
+                              right: Radius.circular(8.0),
+                            ),
+                          ),
+                          child: Center(
+                            child: provider.isLoading == true ? const CircularProgressIndicator(
+                              color: blueTertiary,
+                            ) : Text(
+                              "Submit Report",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
