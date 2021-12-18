@@ -124,7 +124,6 @@ class _DetailListScreenState extends State<DetailListScreen> {
                           fontSize: 18.0,
                           color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w400,
-                          height: 1.7,
                           textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),

@@ -42,6 +42,7 @@ class QuestionnaireProvider extends ChangeNotifier {
     if (kDebugMode) {
       print("Selected radiobutton: $_radioSelected");
     }
+    notifyListeners();
   }
 
   void clear() {

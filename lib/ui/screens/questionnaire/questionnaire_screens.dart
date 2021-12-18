@@ -102,10 +102,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
 
   @override
   void deactivate() {
-    // descriptionController.clear();
-    // phoneNumberController.clear();
     provider.clear();
-    // Provider.of<QuestionnaireProvider>(context, listen: false).clear();
     super.deactivate();
   }
 
