@@ -37,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   final List<Widget> _listWidget = <Widget>[
-    const AccountScreen(),
+    AccountScreen(),
     const HomeScreen(),
     const SettingScreen(),
   ];

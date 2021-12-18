@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
@@ -12,7 +13,8 @@ import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
 import 'package:susmatior_app/util/firebase_auth_helper.dart';
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  AccountScreen({Key? key}) : super(key: key);
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +27,11 @@ class AccountScreen extends StatelessWidget {
           children: [
             Consumer<AccountProvider>(
               builder: (context, provider, _) {
-                return FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance
+                return StreamBuilder<DocumentSnapshot<dynamic>>(
+                  stream: FirebaseFirestore.instance
                       .collection('users')
-                      .doc(provider.user!.uid)
-                      .get(),
+                      .doc(user?.uid)
+                      .snapshots(),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       return Column(
@@ -49,7 +51,7 @@ class AccountScreen extends StatelessWidget {
                             onPressed: () async {
                               FirebaseFirestore.instance
                                   .collection('users')
-                                  .doc(provider.user?.uid)
+                                  .doc(user?.uid)
                                   .update({
                                 'profile-picture':
                                     await provider.changeImageProfile()

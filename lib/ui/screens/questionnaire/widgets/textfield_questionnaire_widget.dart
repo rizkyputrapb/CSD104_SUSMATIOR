@@ -8,16 +8,19 @@ class TextFormFieldBlue extends StatelessWidget {
       required this.label,
       required this.isObscure,
       required this.controller,
+      required this.keyboardType,
       this.validator})
       : super(key: key);
   final String label;
   final bool isObscure;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: keyboardType,
       obscureText: isObscure,
       cursorColor: charadeColor,
       validator: validator,
