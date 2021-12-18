@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,10 +11,7 @@ import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/provider/register_provider.dart';
-import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
-import 'package:susmatior_app/ui/screens/widgets/appbar_custom_leading_widget.dart';
-import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -40,7 +37,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     auth = FirebaseAuth.instance;
     user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
-        print('User is currently signed out!');
+        if (kDebugMode) {
+          print('User is currently signed out!');
+        }
       } else {
         Navigator.pushReplacementNamed(context, MainScreen.routeName);
       }
@@ -280,7 +279,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return TextFormField(
       controller: controller,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.montserrat(color: Colors.white),
       cursorColor: Colors.white,
       validator: (value) {
         if (EmailValidator.validate(value!)) {

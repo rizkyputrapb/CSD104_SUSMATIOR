@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,10 +8,7 @@ import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/provider/login_provider.dart';
-import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
-import 'package:susmatior_app/ui/screens/widgets/appbar_custom_leading_widget.dart';
-import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -27,35 +20,12 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-// StreamSubscription<User?>? user;
-
 class _LoginScreenState extends State<LoginScreen> {
   bool isValidated = false;
 
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
-
-  // @override
-  // void initState() {
-  //   user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
-  //     if (user == null) {
-  //       if (kDebugMode) {
-  //         print('User is currently signed out!');
-  //       }
-  //     } else {
-  //       Navigator.pushNamedAndRemoveUntil(
-  //           context, MainScreen.routeName, (route) => false);
-  //     }
-  //   });
-  //   super.initState();
-  // }
-
-  // @override
-  // void dispose() async {
-  //   super.dispose();
-  //   await user?.cancel();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextFormField(
       controller: controller,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.montserrat(color: Colors.white),
       cursorColor: Colors.white,
       validator: (value) {
         if (EmailValidator.validate(value!)) {

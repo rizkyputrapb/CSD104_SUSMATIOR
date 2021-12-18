@@ -4,7 +4,7 @@ Attributes
 */
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
@@ -21,22 +21,22 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   // Set default `_initialized` and `_error` state to false
-  bool _initialized = false;
-  bool _error = false;
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
     try {
       // Wait for Firebase to initialize and set `_initialized` state to true
-      await Firebase.initializeApp();
       setState(() {
-        print("firebase is initialized");
-        _initialized = true;
+        if (kDebugMode) {
+          print("firebase is initialized");
+        }
       });
     } catch (e) {
       // Set `_error` state to true if Firebase initialization fails
       setState(() {
-        _error = true;
+        if (kDebugMode) {
+          print("firebase is error");
+        }
       });
     }
   }
@@ -64,11 +64,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: (() {
-          if (_error) {
-            return const SnackBar(content: Text("Error initializing firebase"));
-          }
-          return Center(
+        child: SingleChildScrollView(
+          child: Center(
             child: Column(
               children: [
                 Image.asset(
@@ -98,8 +95,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ],
             ),
-          );
-        }()),
+          ),
+        ),
       ),
     );
   }

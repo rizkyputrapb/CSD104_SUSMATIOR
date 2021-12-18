@@ -19,9 +19,8 @@ class LandingScreen extends StatefulWidget {
   State<LandingScreen> createState() => _LandingScreenState();
 }
 
-late StreamSubscription<User?> user;
-
 class _LandingScreenState extends State<LandingScreen> {
+  late StreamSubscription<User?> user;
   @override
   void initState() {
     user = FirebaseAuth.instance.authStateChanges().listen((User? user) async {
@@ -35,12 +34,6 @@ class _LandingScreenState extends State<LandingScreen> {
       }
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    user.cancel();
-    super.dispose();
   }
 
   @override
@@ -170,5 +163,12 @@ class _LandingScreenState extends State<LandingScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    user.pause();
+    user.cancel();
+    super.dispose();
   }
 }

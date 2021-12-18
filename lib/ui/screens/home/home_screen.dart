@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
+import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/provider/home_provider.dart';
 import 'package:susmatior_app/ui/screens/detail_list/detail_list_screens.dart';
 import 'package:susmatior_app/ui/screens/home/widgets/card_list_scam.dart';
@@ -20,13 +23,14 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             Card(
-              margin: const EdgeInsets.all(0),
+              margin: EdgeInsets.zero,
               elevation: 0,
+              color: Colors.transparent,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(padding_12),
                 child: Row(
                   children: [
                     Flexible(
@@ -37,16 +41,17 @@ class HomeScreen extends StatelessWidget {
                             cursorColor: Colors.white,
                             maxLines: 1,
                             keyboardType: TextInputType.number,
-                            style: const TextStyle(
+                            style: GoogleFonts.montserrat(
                               fontSize: 18.0,
                               color: Colors.white,
                             ),
                             decoration: InputDecoration(
                               isDense: true,
-                              fillColor: Color(0xFF428DFF),
+                              fillColor: primaryColor,
                               filled: true,
                               hintText: 'Search...',
-                              hintStyle: const TextStyle(color: Colors.white),
+                              hintStyle:
+                                  GoogleFonts.montserrat(color: Colors.white),
                               hintMaxLines: 1,
                               suffixIcon: const Icon(
                                 Icons.search,
@@ -71,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                     ClipOval(
                       child: Card(
                         margin: EdgeInsets.zero,
-                        color: Color(0xFFE8EDFC),
+                        color: selagoColor,
                         child: IconButton(
                           onPressed: () {
                             Navigator.pushNamed(
@@ -81,7 +86,7 @@ class HomeScreen extends StatelessWidget {
                           },
                           icon: const Icon(
                             Icons.add,
-                            color: Color(0xFF428DFF),
+                            color: primaryColor,
                           ),
                         ),
                       ),

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,9 +39,11 @@ class _DetailListScreenState extends State<DetailListScreen> {
   Widget build(BuildContext context) {
     CollectionReference dataScams =
         FirebaseFirestore.instance.collection('data-scams');
-    print("selected docId: ${widget.docId}");
+    if (kDebugMode) {
+      print("selected docId: ${widget.docId}");
+    }
     return Scaffold(
-      appBar: AppBarPrimary(
+      appBar: const AppBarPrimary(
         textTitle: 'Detail Report',
       ),
       body: SafeArea(
@@ -56,7 +59,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                   textColor: Colors.white,
                   timeInSecForIosWeb: 3,
                   fontSize: 16.0);
-              return SizedBox();
+              return const SizedBox();
             } else if (snapshot.hasError) {
               Fluttertoast.showToast(
                   msg: "There is an error occured!",
@@ -66,7 +69,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                   textColor: Colors.white,
                   timeInSecForIosWeb: 3,
                   fontSize: 16.0);
-              return SizedBox();
+              return const SizedBox();
             } else if (snapshot.connectionState == ConnectionState.done) {
               Map<String, dynamic> data =
                   snapshot.data!.data() as Map<String, dynamic>;
@@ -84,7 +87,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                         'Phone Number',
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w500,
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
@@ -94,7 +97,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                         data['pnumber'],
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w400,
                           textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
@@ -106,7 +109,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                         'Descriptions',
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w500,
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
@@ -119,7 +122,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                         textAlign: TextAlign.justify,
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w400,
                           height: 1.7,
                           textStyle: Theme.of(context).textTheme.bodyText1,
@@ -132,7 +135,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                         'Status',
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w500,
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
@@ -145,7 +148,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                         textAlign: TextAlign.justify,
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w400,
                           textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
@@ -157,7 +160,7 @@ class _DetailListScreenState extends State<DetailListScreen> {
                         'Evidence Report',
                         style: GoogleFonts.montserrat(
                           fontSize: 18.0,
-                          color: Color(0xFF2F2E41),
+                          color: const Color(0xFF2F2E41),
                           fontWeight: FontWeight.w500,
                           textStyle: Theme.of(context).textTheme.headline1,
                         ),
@@ -193,7 +196,9 @@ class _DetailListScreenState extends State<DetailListScreen> {
                                       height:
                                           MediaQuery.of(context).size.height,
                                       errorWidget: (context, url, error) {
-                                        print(error);
+                                        if (kDebugMode) {
+                                          print(error);
+                                        }
                                         return const Icon(Icons.error);
                                       },
                                       placeholder: (context, url) {

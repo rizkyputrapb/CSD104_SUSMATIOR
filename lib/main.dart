@@ -78,9 +78,9 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => const LoginScreen(),
         RegisterScreen.routeName: (context) => const RegisterScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
-        HomeScreen.routeName: (context) => HomeScreen(),
+        HomeScreen.routeName: (context) => const HomeScreen(),
         SettingScreen.routeName: (context) => const SettingScreen(),
-        QuestionnaireScreen.routeName: (context) => QuestionnaireScreen(),
+        QuestionnaireScreen.routeName: (context) => const QuestionnaireScreen(),
         DetailListScreen.routeName: (context) => DetailListScreen(
               docId: ModalRoute.of(context)?.settings.arguments as String?,
             ),

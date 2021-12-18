@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -190,9 +191,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                     onChanged: (value) {
                                       provider.selectedRadio(value as String);
                                     },
-                                    activeColor: const Color(0xFF428DFF),
+                                    activeColor: primaryColor,
                                     fillColor: MaterialStateColor.resolveWith(
-                                      (states) => const Color(0xFF428DFF),
+                                      (states) => primaryColor,
                                     ),
                                   ),
                                 ),
@@ -212,9 +213,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                     onChanged: (value) {
                                       provider.selectedRadio(value as String);
                                     },
-                                    activeColor: const Color(0xFF428DFF),
+                                    activeColor: primaryColor,
                                     fillColor: MaterialStateColor.resolveWith(
-                                      (states) => const Color(0xFF428DFF),
+                                      (states) => primaryColor,
                                     ),
                                   ),
                                 ),
@@ -266,7 +267,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                               provider.isDescValidated == true &&
                               provider.isImageAdded == true &&
                               provider.isScamRadioSelected == true) {
-                            print("all form filled!");
+                            if (kDebugMode) {
+                              print("all form filled!");
+                            }
                             provider.loadingState(true);
                             try {
                               String imagePath = await provider
@@ -285,7 +288,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                     MainScreen.routeName, (route) => false);
                               });
                             } catch (e) {
-                              print("error: $e");
+                              if (kDebugMode) {
+                                print("error: $e");
+                              }
                             }
                           } else {
                             Fluttertoast.showToast(
@@ -298,13 +303,13 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         child: Ink(
                           height: MediaQuery.of(context).size.height / 10,
                           width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.all(padding_16),
+                          padding: const EdgeInsets.all(padding_16),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF428DFF),
+                            color: primaryColor,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(8.0),
-                              right: Radius.circular(8.0),
+                              left: Radius.circular(radius_8),
+                              right: Radius.circular(radius_8),
                             ),
                           ),
                           child: Center(

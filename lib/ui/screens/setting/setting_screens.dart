@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/provider/preferences_provider.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 
@@ -43,7 +44,7 @@ class SettingScreen extends StatelessWidget {
                       flex: 1,
                       child: Switch.adaptive(
                         value: provider.isDailyReminderActive,
-                        activeColor: const Color(0xFF428DFF),
+                        activeColor: primaryColor,
                         onChanged: (newValue) {
                           provider.setDailyReminderActive(newValue);
                         },

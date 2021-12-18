@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/ui/screens/account/account_screens.dart';
 import 'package:susmatior_app/ui/screens/home/home_screen.dart';
 import 'package:susmatior_app/ui/screens/setting/setting_screens.dart';
@@ -45,26 +47,35 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: _listWidget[_bottomNavbarIndex],
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xFF428DFF),
+        color: primaryColor,
         child: SalomonBottomBar(
           items: [
             SalomonBottomBarItem(
               icon: const Icon(
                 Icons.account_circle,
               ),
-              title: const Text('Profile'),
+              title: Text(
+                'Profile',
+                style: GoogleFonts.montserrat(),
+              ),
             ),
             SalomonBottomBarItem(
               icon: const Icon(
                 Icons.home,
               ),
-              title: const Text('Home'),
+              title: Text(
+                'Home',
+                style: GoogleFonts.montserrat(),
+              ),
             ),
             SalomonBottomBarItem(
               icon: const Icon(
                 Icons.settings,
               ),
-              title: const Text('Settings'),
+              title: Text(
+                'Settings',
+                style: GoogleFonts.montserrat(),
+              ),
             ),
           ],
           selectedItemColor: const Color(0xFFBBE1FA),
