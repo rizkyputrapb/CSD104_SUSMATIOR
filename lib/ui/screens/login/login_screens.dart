@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +12,10 @@ import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/provider/login_provider.dart';
+import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
 import 'package:susmatior_app/ui/screens/main/main_screens.dart';
+import 'package:susmatior_app/ui/screens/widgets/appbar_custom_leading_widget.dart';
+import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/textfield_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,31 +27,35 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
+// StreamSubscription<User?>? user;
+
 class _LoginScreenState extends State<LoginScreen> {
   bool isValidated = false;
 
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
-  late StreamSubscription<User?> user;
 
-  @override
-  void initState() {
-    user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        Navigator.pushReplacementNamed(context, MainScreen.routeName);
-      }
-    });
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
+  //     if (user == null) {
+  //       if (kDebugMode) {
+  //         print('User is currently signed out!');
+  //       }
+  //     } else {
+  //       Navigator.pushNamedAndRemoveUntil(
+  //           context, MainScreen.routeName, (route) => false);
+  //     }
+  //   });
+  //   super.initState();
+  // }
 
-  @override
-  void dispose() {
-    user.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() async {
+  //   super.dispose();
+  //   await user?.cancel();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.all(padding_16),
                         child: Image.asset(
                           'assets/images/img_login_picture.png',
+                          width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height / 3.9,
                         ),
                       ),
@@ -114,94 +123,101 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ],
                                 ),
-                                Consumer<LoginProvider>(
-                                    builder: (context, provider, _) {
-                                  return SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    height:
-                                        MediaQuery.of(context).size.width / 6,
-                                    child: TextButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                buttonBlue),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                radius_12),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: padding_64),
+                                  child: Consumer<LoginProvider>(
+                                      builder: (context, provider, _) {
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width /
+                                          2.1,
+                                      child: TextButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  buttonBlue),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      radius_12),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      onPressed: ()  {
-                                        if (isValidated != true ||
-                                            passwordController.text.isEmpty) {
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "Please fill all of the information",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              backgroundColor:
-                                                  Colors.grey.withOpacity(0.75),
-                                              textColor: Colors.white,
-                                              timeInSecForIosWeb: 3,
-                                              fontSize: 16.0);
-                                        } else {
-                                          provider.firebaseLogin(
-                                              emailController.text,
-                                              passwordController.text, context);
-                                        }
-                                        if (provider.state ==
-                                            AuthResultStatus.successful) {
-                                          Navigator.pushReplacementNamed(
-                                              context, MainScreen.routeName);
-                                        } else if (provider.state ==
-                                            AuthResultStatus.wrongPassword) {
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "Please insert the correct password!",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              backgroundColor:
-                                                  Colors.grey.withOpacity(0.75),
-                                              textColor: Colors.white,
-                                              timeInSecForIosWeb: 3,
-                                              fontSize: 16.0);
-                                        } else if (provider.state ==
-                                            AuthResultStatus.userNotFound) {
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "User is not registered yet!",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              backgroundColor:
-                                                  Colors.grey.withOpacity(0.75),
-                                              textColor: Colors.white,
-                                              timeInSecForIosWeb: 3,
-                                              fontSize: 16.0);
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: padding_8),
-                                        child: provider.state ==
-                                                AuthResultStatus.loading
-                                            ? const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              )
-                                            : Text(
-                                                "Login",
-                                                style: GoogleFonts.montserrat(
-                                                  color: blueTertiary,
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.bold,
+                                        onPressed: () {
+                                          if (isValidated != true ||
+                                              passwordController.text.isEmpty) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Please fill all of the information",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor: Colors.grey
+                                                    .withOpacity(0.75),
+                                                textColor: Colors.white,
+                                                timeInSecForIosWeb: 3,
+                                                fontSize: 16.0);
+                                          } else {
+                                            provider.firebaseLogin(
+                                                emailController.text,
+                                                passwordController.text,
+                                                context);
+                                          }
+                                          if (provider.state ==
+                                              AuthResultStatus.successful) {
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                MainScreen.routeName,
+                                                (route) => false);
+                                          } else if (provider.state ==
+                                              AuthResultStatus.wrongPassword) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Please insert the correct password!",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor: Colors.grey
+                                                    .withOpacity(0.75),
+                                                textColor: Colors.white,
+                                                timeInSecForIosWeb: 3,
+                                                fontSize: 16.0);
+                                          } else if (provider.state ==
+                                              AuthResultStatus.userNotFound) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "User is not registered yet!",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor: Colors.grey
+                                                    .withOpacity(0.75),
+                                                textColor: Colors.white,
+                                                timeInSecForIosWeb: 3,
+                                                fontSize: 16.0);
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: padding_8,
+                                              horizontal: padding_32),
+                                          child: provider.state ==
+                                                  AuthResultStatus.loading
+                                              ? const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                )
+                                              : Text(
+                                                  "Login",
+                                                  style: GoogleFonts.montserrat(
+                                                    color: blueTertiary,
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
-                                              ),
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                })
+                                    );
+                                  }),
+                                )
                               ],
                             ),
                           ),

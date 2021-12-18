@@ -30,12 +30,12 @@ class QuestionnaireProvider extends ChangeNotifier {
 
   void validatePNumber(bool state) {
     _isPNumberValidated = state;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void validateDesc(bool state) {
     _isDescValidated = state;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void selectedRadio(String selected) {
@@ -53,7 +53,7 @@ class QuestionnaireProvider extends ChangeNotifier {
     _isLoading = false;
     imageFile = null;
     _radioSelected = "";
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<XFile?> imgFromGallery() async {
@@ -65,6 +65,7 @@ class QuestionnaireProvider extends ChangeNotifier {
 
   Future<String> uploadImage(XFile imageFile) async {
     String filename = basename(imageFile.path);
+    notifyListeners();
     return filename;
   }
 
@@ -77,6 +78,7 @@ class QuestionnaireProvider extends ChangeNotifier {
     TaskSnapshot snapshot = await task;
     String url = await snapshot.ref.getDownloadURL();
     print("imgUrl: $url");
+    notifyListeners();
     return url;
   }
 }

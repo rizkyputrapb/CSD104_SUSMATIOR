@@ -65,8 +65,8 @@ class AccountScreen extends StatelessWidget {
                             child: ButtonRectangleExpanded(
                               onTap: () async {
                                 FirebaseAuthHelper().logout();
-                                await Navigator.pushReplacementNamed(
-                                    context, LandingScreen.routeName);
+                                await Navigator.pushNamedAndRemoveUntil(context,
+                                    LandingScreen.routeName, (route) => false);
                               },
                               textButton: 'Logout',
                             ),

@@ -32,7 +32,7 @@ class CardAvatarAccount extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
-              flex: 1,
+              flex: 0,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(

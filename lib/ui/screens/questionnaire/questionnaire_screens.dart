@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,20 +13,19 @@ import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_expanded_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
-import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   static const routeName = '/questionnaire_screen';
 
-  QuestionnaireScreen({Key? key}) : super(key: key);
+  const QuestionnaireScreen({Key? key}) : super(key: key);
 
   @override
   State<QuestionnaireScreen> createState() => _QuestionnaireScreenState();
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   late CollectionReference dataScam;
   late FirebaseFirestore firestore;
   late QuestionnaireProvider provider;
@@ -103,10 +101,10 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
 
   @override
   void deactivate() {
-    descriptionController.clear();
-    phoneNumberController.clear();
+    // descriptionController.clear();
+    // phoneNumberController.clear();
     provider.clear();
-    Provider.of<QuestionnaireProvider>(context, listen: false);
+    // Provider.of<QuestionnaireProvider>(context, listen: false).clear();
     super.deactivate();
   }
 
@@ -274,17 +272,17 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                               String imagePath = await provider
                                   .uploadImages(provider.imageFile.toString());
 
-                              dataScam.add({
+                              await dataScam.add({
                                 'pnumber': phoneNumberController.text,
                                 'description': descriptionController.text,
                                 'status': provider.radioSelected,
                                 'image': imagePath,
                                 'search-key':
-                                setSearchKey(phoneNumberController.text),
+                                    setSearchKey(phoneNumberController.text),
                               }).whenComplete(() {
                                 provider.loadingState(false);
-                                Navigator.pushReplacementNamed(
-                                    context, MainScreen.routeName);
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    MainScreen.routeName, (route) => false);
                               });
                             } catch (e) {
                               print("error: $e");
@@ -310,17 +308,19 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                             ),
                           ),
                           child: Center(
-                            child: provider.isLoading == true ? const CircularProgressIndicator(
-                              color: blueTertiary,
-                            ) : Text(
-                              "Submit Report",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                fontSize: 18.0,
-                              ),
-                            ),
+                            child: provider.isLoading == true
+                                ? const CircularProgressIndicator(
+                                    color: blueTertiary,
+                                  )
+                                : Text(
+                                    "Submit Report",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

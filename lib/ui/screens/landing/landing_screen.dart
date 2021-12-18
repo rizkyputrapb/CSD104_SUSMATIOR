@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
+import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/register/register_screens.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -14,7 +19,30 @@ class LandingScreen extends StatefulWidget {
   State<LandingScreen> createState() => _LandingScreenState();
 }
 
+late StreamSubscription<User?> user;
+
 class _LandingScreenState extends State<LandingScreen> {
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user == null) {
+        if (kDebugMode) {
+          print('User is currently signed out!');
+        }
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+            context, MainScreen.routeName, (route) => false);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    user.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

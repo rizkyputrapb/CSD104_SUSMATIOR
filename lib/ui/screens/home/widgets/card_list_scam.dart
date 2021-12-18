@@ -32,7 +32,7 @@ class CardListScam extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                flex: 1,
+                flex: 0,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CircleAvatar(
@@ -47,7 +47,7 @@ class CardListScam extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 3,
+                flex: 5,
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Column(
@@ -78,7 +78,7 @@ class CardListScam extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 0,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
