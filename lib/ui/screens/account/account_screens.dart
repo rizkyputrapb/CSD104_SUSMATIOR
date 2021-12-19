@@ -27,11 +27,11 @@ class AccountScreen extends StatelessWidget {
           children: [
             Consumer<AccountProvider>(
               builder: (context, provider, _) {
-                return StreamBuilder<DocumentSnapshot<dynamic>>(
-                  stream: FirebaseFirestore.instance
+                return FutureBuilder<DocumentSnapshot<dynamic>>(
+                  future: FirebaseFirestore.instance
                       .collection('users')
                       .doc(user?.uid)
-                      .snapshots(),
+                      .get(),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       return Column(
@@ -66,7 +66,7 @@ class AccountScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(padding_8),
                             child: ButtonRectangleExpanded(
                               onTap: () async {
-                                FirebaseAuthHelper().logout();
+                                await FirebaseAuthHelper().logout();
                                 Navigator.pushNamedAndRemoveUntil(context,
                                     LandingScreen.routeName, (route) => false);
                               },
