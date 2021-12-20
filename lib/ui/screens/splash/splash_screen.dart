@@ -4,10 +4,13 @@ Attributes
 */
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/ui/screens/landing/landing_screen.dart';
+import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 
 class SplashScreen extends StatefulWidget {
   static const routeName = '/splash_screen';
@@ -31,9 +34,27 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationToLanding() {
-    Navigator.pushReplacementNamed(
-      context,
-      LandingScreen.routeName,
+    FirebaseAuth.instance.authStateChanges().listen(
+          (User? user) {
+        try {
+          if (user == null) {
+            if (kDebugMode) {
+              Navigator.pushReplacementNamed(
+                context,
+                LandingScreen.routeName,
+              );
+            }
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+                context, MainScreen.routeName, (route) => false);
+          }
+        } catch (e) {
+          if (kDebugMode) {
+            print(e.toString());
+          }
+          return;
+        }
+      },
     );
   }
 

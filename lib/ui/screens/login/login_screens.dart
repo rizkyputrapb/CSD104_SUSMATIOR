@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,6 +30,22 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
+  late StreamSubscription<User?> user;
+
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        if (kDebugMode) {
+          print('User is currently signed out!');
+        }
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+            context, MainScreen.routeName, (route) => false);
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -41,7 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           print('User is currently signed out!');
         }
       } else {
-        Navigator.pushReplacementNamed(context, MainScreen.routeName);
+        Navigator.pushNamedAndRemoveUntil(
+            context, MainScreen.routeName, (route) => false);
       }
     });
     super.initState();
