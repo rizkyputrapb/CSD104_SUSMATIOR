@@ -16,6 +16,7 @@ class ButtonRectangleExpanded extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(radius_8),
       child: Ink(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(padding_16),

@@ -50,6 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    user.cancel();
     emailController.clear();
     firstNameController.clear();
     lastNameController.clear();
