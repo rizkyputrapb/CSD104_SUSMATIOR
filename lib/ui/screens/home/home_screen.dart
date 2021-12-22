@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                             controller: provider.searchKeyword,
                             cursorColor: Colors.white,
                             maxLines: 1,
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.phone,
                             style: GoogleFonts.montserrat(
                               fontSize: 18.0,
                               color: Colors.white,

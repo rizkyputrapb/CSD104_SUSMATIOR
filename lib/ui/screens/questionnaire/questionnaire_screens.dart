@@ -130,7 +130,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     children: [
                       TextFormFieldBlue(
                           label: 'Phone Number',
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.phone,
                           isObscure: false,
                           controller: phoneNumberController,
                           validator: (text) {

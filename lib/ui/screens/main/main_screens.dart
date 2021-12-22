@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -18,22 +17,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _bottomNavbarIndex = 1;
-  late User? currentUser;
 
   void _onItemTap(int index) {
     setState(() {
       _bottomNavbarIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    getUser();
-    super.initState();
-  }
-
-  void getUser() {
-    currentUser = FirebaseAuth.instance.currentUser;
   }
 
   final List<Widget> _listWidget = <Widget>[

@@ -30,22 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
-  late StreamSubscription<User?> user;
-
-  @override
-  void initState() {
-    user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        if (kDebugMode) {
-          print('User is currently signed out!');
-        }
-      } else {
-        Navigator.pushNamedAndRemoveUntil(
-            context, MainScreen.routeName, (route) => false);
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -252,5 +236,12 @@ class _LoginScreenState extends State<LoginScreen> {
             borderSide: BorderSide(width: 2, color: Colors.red)),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }

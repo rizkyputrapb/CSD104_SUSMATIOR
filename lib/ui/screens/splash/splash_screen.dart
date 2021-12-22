@@ -34,27 +34,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationToLanding() {
-    FirebaseAuth.instance.authStateChanges().listen(
-          (User? user) {
-        try {
-          if (user == null) {
-            if (kDebugMode) {
-              Navigator.pushReplacementNamed(
-                context,
-                LandingScreen.routeName,
-              );
-            }
-          } else {
-            Navigator.pushNamedAndRemoveUntil(
-                context, MainScreen.routeName, (route) => false);
-          }
-        } catch (e) {
-          if (kDebugMode) {
-            print(e.toString());
-          }
-          return;
-        }
-      },
+    Navigator.pushReplacementNamed(
+      context,
+      LandingScreen.routeName,
     );
   }
 
