@@ -1,40 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
+import 'package:susmatior_app/constants/padding_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 
 class CardListScam extends StatelessWidget {
-  CardListScam({
+  const CardListScam({
     Key? key,
     required this.onTap,
     required this.title,
     required this.description,
     required this.status,
   }) : super(key: key);
-  String title;
-  String description;
-  String status;
+  final String title;
+  final String description;
+  final String status;
   final GestureTapCallback onTap;
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0.0,
-      color: Color(0xFFECF0F1),
-      margin: EdgeInsets.symmetric(
+      color: selagoColor,
+      margin: const EdgeInsets.symmetric(
         horizontal: 10.0,
         vertical: 2.0,
       ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius_8),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(radius_8),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(padding_8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                flex: 1,
+                flex: 0,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(padding_8),
                   child: CircleAvatar(
                     foregroundColor: Colors.transparent,
                     radius: 27,
@@ -47,9 +52,9 @@ class CardListScam extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 3,
+                flex: 5,
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(padding_8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -58,10 +63,10 @@ class CardListScam extends StatelessWidget {
                         style: GoogleFonts.montserrat(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF2F2E41),
+                          color: charadeColor,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8.0,
                       ),
                       Text(
@@ -70,7 +75,7 @@ class CardListScam extends StatelessWidget {
                         maxLines: 1,
                         style: GoogleFonts.montserrat(
                           fontSize: 14.0,
-                          color: Color(0xFFAAAAAA),
+                          color: silverChaliceColor,
                         ),
                       )
                     ],
@@ -78,14 +83,14 @@ class CardListScam extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 0,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(padding_8),
                   child: Text(
                     status,
                     style: GoogleFonts.montserrat(
                       fontSize: 12.0,
-                      color: Color(0xFF428DFF),
+                      color: primaryColor,
                     ),
                   ),
                 ),

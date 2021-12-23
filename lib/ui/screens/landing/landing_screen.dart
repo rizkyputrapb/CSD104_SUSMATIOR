@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/radius_constants.dart';
 import 'package:susmatior_app/ui/screens/login/login_screens.dart';
+import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/register/register_screens.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -15,6 +20,34 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  late StreamSubscription<User?> user;
+
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.authStateChanges().listen(
+      (User? user) {
+        try {
+          if (user == null) {
+            if (kDebugMode) {
+              print('User is not logged');
+              return;
+            }
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+                context, MainScreen.routeName, (route) => false);
+          }
+        } catch (e) {
+          if (kDebugMode) {
+            print(e.toString());
+          }
+          return;
+        }
+        return;
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,5 +175,11 @@ class _LandingScreenState extends State<LandingScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    user.cancel();
+    super.dispose();
   }
 }

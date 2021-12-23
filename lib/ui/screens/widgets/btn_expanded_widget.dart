@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
+import 'package:susmatior_app/constants/radius_constants.dart';
 
 class ButtonRectangleExpanded extends StatelessWidget {
   const ButtonRectangleExpanded({
@@ -14,15 +16,16 @@ class ButtonRectangleExpanded extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(radius_8),
       child: Ink(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(padding_16),
+        padding: const EdgeInsets.all(padding_16),
         decoration: const BoxDecoration(
-          color: Color(0xFF428DFF),
+          color: primaryColor,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(8.0),
-            right: Radius.circular(8.0),
+            left: Radius.circular(radius_8),
+            right: Radius.circular(radius_8),
           ),
         ),
         child: Text(

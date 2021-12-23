@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:susmatior_app/constants/padding_constants.dart';
@@ -12,7 +13,8 @@ import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
 import 'package:susmatior_app/util/firebase_auth_helper.dart';
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  AccountScreen({Key? key}) : super(key: key);
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +27,10 @@ class AccountScreen extends StatelessWidget {
           children: [
             Consumer<AccountProvider>(
               builder: (context, provider, _) {
-                return FutureBuilder<DocumentSnapshot>(
+                return FutureBuilder<DocumentSnapshot<dynamic>>(
                   future: FirebaseFirestore.instance
                       .collection('users')
-                      .doc(provider.user!.uid)
+                      .doc(user?.uid)
                       .get(),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
@@ -49,7 +51,7 @@ class AccountScreen extends StatelessWidget {
                             onPressed: () async {
                               FirebaseFirestore.instance
                                   .collection('users')
-                                  .doc(provider.user?.uid)
+                                  .doc(user?.uid)
                                   .update({
                                 'profile-picture':
                                     await provider.changeImageProfile()
@@ -64,9 +66,9 @@ class AccountScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(padding_8),
                             child: ButtonRectangleExpanded(
                               onTap: () async {
-                                FirebaseAuthHelper().logout();
-                                await Navigator.pushReplacementNamed(
-                                    context, LandingScreen.routeName);
+                                await FirebaseAuthHelper().logout();
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    LandingScreen.routeName, (route) => false);
                               },
                               textButton: 'Logout',
                             ),

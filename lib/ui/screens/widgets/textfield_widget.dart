@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextFormFieldWhite extends StatelessWidget {
   const TextFormFieldWhite(
-      {Key? key,
-      this.controller,
-      required this.label,
-      required this.isObscure})
+      {Key? key, this.controller, required this.label, required this.isObscure})
       : super(key: key);
 
   final String label;
@@ -15,12 +13,13 @@ class TextFormFieldWhite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.montserrat(color: Colors.white),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
       obscureText: isObscure,
       cursorColor: Colors.white,
-      validator: (value) => value!.isNotEmpty || value != "" ? null : "Please fill this field",
+      validator: (value) =>
+          value!.isNotEmpty || value != "" ? null : "Please fill this field",
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white),

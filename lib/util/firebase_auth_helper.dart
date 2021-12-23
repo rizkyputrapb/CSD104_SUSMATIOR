@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:susmatior_app/constants/authstatus_enum.dart';
 
 class FirebaseAuthHelper {
@@ -18,7 +19,9 @@ class FirebaseAuthHelper {
         _status = AuthResultStatus.undefined;
       }
     } catch (e) {
-      print('Exception @createAccount: $e');
+      if (kDebugMode) {
+        print('Exception @createAccount: $e');
+      }
       _status = AuthExceptionHandler.handleException(e);
     }
     return _status;
@@ -35,7 +38,9 @@ class FirebaseAuthHelper {
         _status = AuthResultStatus.undefined;
       }
     } catch (e) {
-      print('Exception @createAccount: $e');
+      if (kDebugMode) {
+        print('Exception @createAccount: $e');
+      }
       _status = AuthExceptionHandler.handleException(e);
     }
     return _status;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:susmatior_app/constants/colors_constants.dart';
 
 class AppBarPrimary extends StatelessWidget implements PreferredSizeWidget {
   const AppBarPrimary({
@@ -10,15 +11,12 @@ class AppBarPrimary extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xFFF4F9F9),
+      backgroundColor: primaryColor,
       elevation: 0,
-      iconTheme: IconThemeData(
-        color: Color(0xFF428DFF),
-      ),
       title: Text(
         textTitle,
         style: GoogleFonts.montserrat(
-          color: Color(0xFF2F2E41),
+          color: porcelainColor,
           fontWeight: FontWeight.w400,
         ),
       ),
@@ -26,5 +24,5 @@ class AppBarPrimary extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0);
+  Size get preferredSize => const Size.fromHeight(56.0);
 }
