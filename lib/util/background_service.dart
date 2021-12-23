@@ -1,6 +1,7 @@
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:susmatior_app/main.dart';
 import 'package:susmatior_app/util/notification_helper.dart';
 
@@ -25,9 +26,10 @@ class BackgroundService {
   }
 
   static Future<void> callback() async {
-    print('Alarm fired!');
+    if (kDebugMode) {
+      print('Alarm fired!');
+    }
     final NotificationHelper _notificationHelper = NotificationHelper();
-    // var result = await ApiService().getList(Client());
     await _notificationHelper.showNotification(flutterLocalNotificationsPlugin);
 
     _uiSendPort ??= IsolateNameServer.lookupPortByName(_isolateName);

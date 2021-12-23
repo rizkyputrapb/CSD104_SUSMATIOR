@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 enum AuthResultStatus {
   loading,
   successful,
@@ -12,8 +14,10 @@ enum AuthResultStatus {
 
 class AuthExceptionHandler {
   static handleException(e) {
-    print("error code: ${e.code}");
-    var status;
+    if (kDebugMode) {
+      print("error code: ${e.code}");
+    }
+    AuthResultStatus status;
     switch (e.code) {
       case "invalid-email":
         status = AuthResultStatus.invalidEmail;
@@ -56,7 +60,7 @@ class AuthExceptionHandler {
         break;
       case AuthResultStatus.emailAlreadyExists:
         errorMessage =
-        "The email has already been registered. Please login or reset your password.";
+            "The email has already been registered. Please login or reset your password.";
         break;
       default:
         errorMessage = "An undefined Error happened.";

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -30,19 +30,19 @@ class QuestionnaireProvider extends ChangeNotifier {
 
   void validatePNumber(bool state) {
     _isPNumberValidated = state;
-    notifyListeners();
   }
 
   void validateDesc(bool state) {
     _isDescValidated = state;
-    notifyListeners();
   }
 
   void selectedRadio(String selected) {
     _radioSelected = selected;
     _isScamRadioSelected = true;
+    if (kDebugMode) {
+      print("Selected radiobutton: $_radioSelected");
+    }
     notifyListeners();
-    print("Selected radiobutton: $_radioSelected");
   }
 
   void clear() {
@@ -53,7 +53,6 @@ class QuestionnaireProvider extends ChangeNotifier {
     _isLoading = false;
     imageFile = null;
     _radioSelected = "";
-    notifyListeners();
   }
 
   Future<XFile?> imgFromGallery() async {
@@ -65,6 +64,7 @@ class QuestionnaireProvider extends ChangeNotifier {
 
   Future<String> uploadImage(XFile imageFile) async {
     String filename = basename(imageFile.path);
+    notifyListeners();
     return filename;
   }
 
@@ -76,7 +76,10 @@ class QuestionnaireProvider extends ChangeNotifier {
     UploadTask task = ref.putFile(File(imagePath.path));
     TaskSnapshot snapshot = await task;
     String url = await snapshot.ref.getDownloadURL();
-    print("imgUrl: $url");
+    if (kDebugMode) {
+      print("imgUrl: $url");
+    }
+    notifyListeners();
     return url;
   }
 }

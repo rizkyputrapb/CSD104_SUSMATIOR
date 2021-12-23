@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,9 +37,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     auth = FirebaseAuth.instance;
     user = FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
-        print('User is currently signed out!');
+        if (kDebugMode) {
+          print('User is currently signed out!');
+        }
       } else {
-        Navigator.pushReplacementNamed(context, MainScreen.routeName);
+        Navigator.pushNamedAndRemoveUntil(
+            context, MainScreen.routeName, (route) => false);
       }
     });
     super.initState();
@@ -47,6 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    user.cancel();
     emailController.clear();
     firstNameController.clear();
     lastNameController.clear();
@@ -75,6 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         margin: const EdgeInsets.all(padding_16),
                         child: Image.asset(
                           'assets/images/img_register_picture.png',
+                          width: MediaQuery.of(context).size.height,
                           height: MediaQuery.of(context).size.height / 3.9,
                         ),
                       ),
@@ -122,7 +127,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         Expanded(
                                           child: Container(
                                             margin: const EdgeInsets.only(
-                                                top: padding_16, left: padding_8),
+                                                top: padding_16,
+                                                left: padding_8),
                                             child: TextFormFieldWhite(
                                               label: "Last Name",
                                               isObscure: false,
@@ -135,10 +141,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     Container(
                                         margin: const EdgeInsets.only(
                                             top: padding_16),
-                                        child: _emailFormField(emailController)),
+                                        child:
+                                            _emailFormField(emailController)),
                                     Container(
-                                      margin:
-                                          const EdgeInsets.only(top: padding_16),
+                                      margin: const EdgeInsets.only(
+                                          top: padding_16),
                                       child: TextFormFieldWhite(
                                         label: "Password",
                                         isObscure: true,
@@ -148,90 +155,107 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: padding_16),
+                                  padding:
+                                      const EdgeInsets.only(top: padding_16),
                                   child: Consumer<RegisterProvider>(
                                     builder: (context, provider, _) {
-                                      return TextButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    buttonBlue),
-                                            shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            radius_12)))),
-                                        onPressed: () {
-                                          if (isValidated != true ||
-                                              firstNameController.text.isEmpty ||
-                                              lastNameController.text.isEmpty ||
-                                              passwordController.text.isEmpty) {
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    "Please fill all of the information",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                backgroundColor:
-                                                    Colors.grey.withOpacity(0.75),
-                                                textColor: Colors.white,
-                                                timeInSecForIosWeb: 3,
-                                                fontSize: 16.0);
-                                          } else {
-                                            provider.register(
-                                                emailController.text,
-                                                passwordController.text,
-                                                firstNameController.text,
-                                                lastNameController.text,
-                                                context);
-                                          }
-                                          if (provider.state ==
-                                              AuthResultStatus.successful) {
-                                            Navigator.pushReplacementNamed(
-                                                context, MainScreen.routeName);
-                                          } else if (provider.state ==
-                                              AuthResultStatus
-                                                  .emailAlreadyExists) {
-                                            Fluttertoast.showToast(
-                                                msg: "Email already registered!",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                backgroundColor:
-                                                    Colors.grey.withOpacity(0.75),
-                                                textColor: Colors.white,
-                                                timeInSecForIosWeb: 3,
-                                                fontSize: 16.0);
-                                          } else if (provider.state ==
-                                              AuthResultStatus.invalidEmail) {
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    "Please insert a valid email address!",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                backgroundColor:
-                                                    Colors.grey.withOpacity(0.75),
-                                                textColor: Colors.white,
-                                                timeInSecForIosWeb: 3,
-                                                fontSize: 16.0);
-                                          }
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: padding_8,
-                                              horizontal: 32),
-                                          child: provider.state ==
-                                                  AuthResultStatus.loading
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                )
-                                              : Text(
-                                                  "Register",
-                                                  style: GoogleFonts.montserrat(
-                                                    color: blueTertiary,
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold,
+                                      return SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2.1,
+                                        child: TextButton(
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      buttonBlue),
+                                              shape: MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              radius_12)))),
+                                          onPressed: () {
+                                            if (isValidated != true ||
+                                                firstNameController
+                                                    .text.isEmpty ||
+                                                lastNameController
+                                                    .text.isEmpty ||
+                                                passwordController
+                                                    .text.isEmpty) {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Please fill all of the information",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                            } else {
+                                              provider.register(
+                                                  emailController.text,
+                                                  passwordController.text,
+                                                  firstNameController.text,
+                                                  lastNameController.text,
+                                                  context);
+                                            }
+                                            if (provider.state ==
+                                                AuthResultStatus.successful) {
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  MainScreen.routeName,
+                                                  (route) => false);
+                                            } else if (provider.state ==
+                                                AuthResultStatus
+                                                    .emailAlreadyExists) {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Email already registered!",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                            } else if (provider.state ==
+                                                AuthResultStatus.invalidEmail) {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Please insert a valid email address!",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.75),
+                                                  textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
+                                                  fontSize: 16.0);
+                                            }
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: padding_8,
+                                                horizontal: 32),
+                                            child: provider.state ==
+                                                    AuthResultStatus.loading
+                                                ? const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  )
+                                                : Text(
+                                                    "Register",
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      color: blueTertiary,
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                ),
+                                          ),
                                         ),
                                       );
                                     },
@@ -257,7 +281,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return TextFormField(
       controller: controller,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.montserrat(color: Colors.white),
       cursorColor: Colors.white,
       validator: (value) {
         if (EmailValidator.validate(value!)) {

@@ -36,6 +36,30 @@ class LoginProvider extends ChangeNotifier {
             _state = AuthResultStatus.userNotFound;
             notifyListeners();
             break;
+          case AuthResultStatus.loading:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.emailAlreadyExists:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.invalidEmail:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.operationNotAllowed:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.undefined:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.error:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
         }
       },
     );

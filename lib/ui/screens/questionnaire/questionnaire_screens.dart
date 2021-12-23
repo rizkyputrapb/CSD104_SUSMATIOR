@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,20 +14,19 @@ import 'package:susmatior_app/ui/screens/main/main_screens.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_expanded_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/questionnaire/widgets/textfield_questionnaire_widget.dart';
 import 'package:susmatior_app/ui/screens/widgets/appbar_widget.dart';
-import 'package:susmatior_app/ui/screens/widgets/btn_expanded_widget.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   static const routeName = '/questionnaire_screen';
 
-  QuestionnaireScreen({Key? key}) : super(key: key);
+  const QuestionnaireScreen({Key? key}) : super(key: key);
 
   @override
   State<QuestionnaireScreen> createState() => _QuestionnaireScreenState();
 }
 
 class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   late CollectionReference dataScam;
   late FirebaseFirestore firestore;
   late QuestionnaireProvider provider;
@@ -103,10 +102,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
 
   @override
   void deactivate() {
-    descriptionController.clear();
-    phoneNumberController.clear();
     provider.clear();
-    Provider.of<QuestionnaireProvider>(context, listen: false);
     super.deactivate();
   }
 
@@ -134,6 +130,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                     children: [
                       TextFormFieldBlue(
                           label: 'Phone Number',
+                          keyboardType: TextInputType.phone,
                           isObscure: false,
                           controller: phoneNumberController,
                           validator: (text) {
@@ -192,9 +189,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                     onChanged: (value) {
                                       provider.selectedRadio(value as String);
                                     },
-                                    activeColor: const Color(0xFF428DFF),
+                                    activeColor: primaryColor,
                                     fillColor: MaterialStateColor.resolveWith(
-                                      (states) => const Color(0xFF428DFF),
+                                      (states) => primaryColor,
                                     ),
                                   ),
                                 ),
@@ -214,9 +211,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                                     onChanged: (value) {
                                       provider.selectedRadio(value as String);
                                     },
-                                    activeColor: const Color(0xFF428DFF),
+                                    activeColor: primaryColor,
                                     fillColor: MaterialStateColor.resolveWith(
-                                      (states) => const Color(0xFF428DFF),
+                                      (states) => primaryColor,
                                     ),
                                   ),
                                 ),
@@ -268,26 +265,30 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                               provider.isDescValidated == true &&
                               provider.isImageAdded == true &&
                               provider.isScamRadioSelected == true) {
-                            print("all form filled!");
+                            if (kDebugMode) {
+                              print("all form filled!");
+                            }
                             provider.loadingState(true);
                             try {
                               String imagePath = await provider
                                   .uploadImages(provider.imageFile.toString());
 
-                              dataScam.add({
+                              await dataScam.add({
                                 'pnumber': phoneNumberController.text,
                                 'description': descriptionController.text,
                                 'status': provider.radioSelected,
                                 'image': imagePath,
                                 'search-key':
-                                setSearchKey(phoneNumberController.text),
+                                    setSearchKey(phoneNumberController.text),
                               }).whenComplete(() {
                                 provider.loadingState(false);
-                                Navigator.pushReplacementNamed(
-                                    context, MainScreen.routeName);
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    MainScreen.routeName, (route) => false);
                               });
                             } catch (e) {
-                              print("error: $e");
+                              if (kDebugMode) {
+                                print("error: $e");
+                              }
                             }
                           } else {
                             Fluttertoast.showToast(
@@ -300,27 +301,29 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                         child: Ink(
                           height: MediaQuery.of(context).size.height / 10,
                           width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.all(padding_16),
+                          padding: const EdgeInsets.all(padding_16),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF428DFF),
+                            color: primaryColor,
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(8.0),
-                              right: Radius.circular(8.0),
+                              left: Radius.circular(radius_8),
+                              right: Radius.circular(radius_8),
                             ),
                           ),
                           child: Center(
-                            child: provider.isLoading == true ? const CircularProgressIndicator(
-                              color: blueTertiary,
-                            ) : Text(
-                              "Submit Report",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                fontSize: 18.0,
-                              ),
-                            ),
+                            child: provider.isLoading == true
+                                ? const CircularProgressIndicator(
+                                    color: blueTertiary,
+                                  )
+                                : Text(
+                                    "Submit Report",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:susmatior_app/constants/authstatus_enum.dart';
 import 'package:susmatior_app/util/firebase_auth_helper.dart';
@@ -10,13 +9,11 @@ class RegisterProvider extends ChangeNotifier {
 
   AuthResultStatus? get state => _state;
 
-  void register(String email, String password, String firstName, String lastName, BuildContext context) async {
+  void register(String email, String password, String firstName,
+      String lastName, BuildContext context) async {
     _state = AuthResultStatus.loading;
     notifyListeners();
-    await FirebaseAuthHelper()
-        .createAccount(
-            email: email, pass: password)
-        .then(
+    await FirebaseAuthHelper().createAccount(email: email, pass: password).then(
       (status) async {
         User? user = FirebaseAuth.instance.currentUser;
         await FirebaseFirestore.instance
@@ -63,6 +60,23 @@ class RegisterProvider extends ChangeNotifier {
             notifyListeners();
             break;
           case AuthResultStatus.undefined:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.loading:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.wrongPassword:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.userNotFound:
+            // ignore: todo
+            // TODO: Handle this case.
+            break;
+          case AuthResultStatus.error:
+            // ignore: todo
             // TODO: Handle this case.
             break;
         }
