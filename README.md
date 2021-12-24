@@ -34,3 +34,5 @@ Susmatior is an application to report possible scam/spam/fraudulent phone number
 
  - Toast: [fluttertoast](https://pub.dev/packages/fluttertoast)
 
+### Application Usage Document 🧾
+- Indonesian Language: [Dokumen penggunaan aplikasi SUSMATIOR](https://docs.google.com/document/d/1eoAJUULBCcga3rP-ezsNtup49TOU_qzz8rE48Hf0HWo/edit?usp=sharing)
